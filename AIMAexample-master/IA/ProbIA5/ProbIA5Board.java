@@ -1,5 +1,8 @@
 package IA.ProbIA5;
 
+import IA.Red.CentrosDatos;
+import IA.Red.Sensores;
+
 /**
  * Created by bejar on 17/01/17.
  */
@@ -9,19 +12,17 @@ public class ProbIA5Board {
      *
 
     /* State data structure
-        vector with the parity of the coins (we can assume 0 = heads, 1 = tails
-     */
-
-    private int [] board;
-    private static int [] solution;
-
-    /* Constructor */
+1 "tablero" para todo el problema, donde tenemos las posiciones de cada nodo
+    */
      static public CentrosDatos centrosDatos;
     static public Sensores sensores;
+
+    /* Constructor */
+
  
     public boolean is_goal(){
-         // compute if board = solution
- 
+         // en principio no planteamos salirnos del 
+         //espacio de soluciones en este problema 
          return true;
      }
  
@@ -36,9 +37,8 @@ public class ProbIA5Board {
     public double heuristic(){
         // compute the number of coins out of place respect to solution
         double sum =0;
-        for( int i : board){
-            if(board[i]!= solution[i])sum++;
-        }
+        //falta implementar cada uno de los heuristicos, uno que funcione
+        //con suma, otro con una división, y quizás uno que los mezcle
         return sum;
     }
 }

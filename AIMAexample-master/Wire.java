@@ -10,7 +10,10 @@
  */
 public class Wire {
     
-    private int length;
+    private int length;///ESTO DEBERIA DE SER UN DOUBLE
+  //guillem: Yo diría que esto lo calculemos en cuanto estemos computando 
+    //una solución en si, me parece que a ojo no podemos determinar mucho de 
+    //la largada de dos wires
     private int node1; //sensor
     private int node2; //sensor o centro 
     private boolean stos; //true sensor -> sensor false sensor -> centro 
