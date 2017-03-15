@@ -1,4 +1,6 @@
 
+import IA.Red.Sensor;
+import IA.Red.Sensores;
 import java.util.ArrayList;
 
 /*
@@ -19,8 +21,8 @@ public class Wires {
         W = new ArrayList<Wire>();
     }
     
-    public int CreateWire(int n1, int n2){
-        W.add(new Wire(n1,n2,calclength(n1,n2)));
+    public int CreateWire(int n1, int n2, boolean stos){
+        W.add(new Wire(n1,n2,calclength(n1,n2,stos),stos));
         return W.size() - 1;    
     }
     
@@ -32,11 +34,16 @@ public class Wires {
         return W.get(index);
     
     }
+        
+    public int size() {
+        return W.size();
+    }
     
-    public void SwapWire(int index1, int index2){
-        Wire aux = W.get(index1);
-        W.set(index1, W.get(index2));
-        W.set(index2, aux);
+    public int calclength (int n1,int n2, boolean stos){
+        if(stos) {
+            int x= Sensores.get(n1)  
+        }
+        
     }
     
 }

@@ -11,13 +11,15 @@
 public class Wire {
     
     private int length;
-    private int node1;
-    private int node2;
+    private int node1; //sensor
+    private int node2; //sensor o centro 
+    private boolean stos; //true sensor -> sensor false sensor -> centro 
     
-    public Wire (int n1, int n2, int l){
+    public Wire (int n1, int n2, int l, boolean stos){
         this.length=l;
         this.node1=n1;
         this.node2=n2;
+        this.stos=stos;
     }
     
     public int getlength(){
@@ -30,5 +32,9 @@ public class Wire {
     
     public int getnode2(){
     return this.node2;
+    }
+    
+    public boolean is_stos(){
+    return stos;
     }
 }

@@ -16,41 +16,23 @@ public class ProbIA5Board {
     private static int [] solution;
 
     /* Constructor */
-    public ProbIA5Board(int []init, int[] goal) {
-
-        board = new int[init.length];
-        solution = new int[init.length];
-
-        for (int i = 0; i< init.length; i++) {
-            board[i] = init[i];
-            solution[i] = goal[i];
-        }
-
+     static public CentrosDatos centrosDatos;
+    static public Sensores sensores;
+ 
+    public boolean is_goal(){
+         // compute if board = solution
+ 
+         return true;
+     }
+ 
+    public ProbIA5Board(){
+        this.centrosDatos= new CentrosDatos(4,1234);
+        this.sensores= new Sensores(100, 1234);
     }
-
-    /* vvvvv TO COMPLETE vvvvv */
-    public void flip_it(int i){
-        if ( i == board.length-1)
-        {
-            if (board[i] == 0) {
-                board[i] = 1;
-            }
-            else board[i] = 0;
-            if(board[0]==0)board[0]=1;
-            else board[0]=0;
-        } else 
-        {
-            if (board[i] == 0) board[i] = 1;
-            else board[i] = 0;
-            if (board[i+1] == 0) board[i+1] = 1;
-            else board[i+1] = 0;
-        }
-        
-        // flip the coins i and i + 1
-        //modulo
-    }
-
-    /* Heuristic function */
+     // Some functions will be needed for creating a copy of the state
+ 
+         
+ 
     public double heuristic(){
         // compute the number of coins out of place respect to solution
         double sum =0;
@@ -59,28 +41,4 @@ public class ProbIA5Board {
         }
         return sum;
     }
-
-     /* Goal test */
-     public boolean is_goal(){
-         // compute if board = solution
-        for(int i=0; i<5;i++){
-            if(board[i]!= solution[i])return false;
-        }
-         return true;
-     }
-
-     /* auxiliary functions */
-
-     // Some functions will be needed for creating a copy of the state
-     public ProbIA5Board getCopy(){
-         int[] nuevo;
-        nuevo = new int[5];
-         for(int i=0;i<5;i++)nuevo[i]= board[i];
-         ProbIA5Board n = new ProbIA5Board(nuevo, solution);
-       return n;
-     }
-     
-
-    /* ^^^^^ TO COMPLETE ^^^^^ */
-
 }
