@@ -12,9 +12,11 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         ArrayList retval = new ArrayList();
         //aqui debemos crear nuevos estados y añadirlos a retval
         //basicamente uno para cada operación y cada posible cambio
-        //quizás querremos descartar unos cuantso
+        //quizás querremos descartar unos cuantos
+        ProbIA5Board board= (ProbIA5Board)state;
+        ProbIA5Board board2=board.copyestat();
+        retval.add(board2);
         return retval;
-
     }
 
 }

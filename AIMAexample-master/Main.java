@@ -35,7 +35,7 @@ public class Main {
     public static void main(String[] args) throws Exception{
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
         ProbIA5Board board=new ProbIA5Board();
-        
+        //board.setStart();
         //wires en estado inicial
         Wires W = new Wires(board);
         
