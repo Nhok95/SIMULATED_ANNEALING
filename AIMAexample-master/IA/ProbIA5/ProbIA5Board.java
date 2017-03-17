@@ -1,7 +1,11 @@
 package IA.ProbIA5;
 
+import IA.Red.Centro;
 import IA.Red.CentrosDatos;
+import IA.Red.Sensor;
 import IA.Red.Sensores;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +22,12 @@ public class ProbIA5Board {
     */
      static public CentrosDatos centrosDatos;
     static public Sensores sensores;
-    private Tree sol;
-
-        
+    private ArrayList<Tree <Integer> > sol;
+    //ArrayList<Integer> conex;
+    static  Integer numCentros=4;
+    //CODIFICACION : si el Integer a >= numcentros es un sensor.
+    //se busca en sensores a-numcentros 
+    //else se busca en centros
  
     public boolean is_goal(){
          // en principio no planteamos salirnos del 
@@ -31,16 +38,32 @@ public class ProbIA5Board {
     public ProbIA5Board(){
         this.centrosDatos= new CentrosDatos(4,1234);
         this.sensores= new Sensores(100, 1234);
+       // this.conex=new ArrayList();
+        for(int i= 0; i<numCentros ;i++) this.sol.add(new Tree(0));
+        //for(int i=0;i<104; i++)conex.add(0);
     }
      // Some functions will be needed for creating a copy of the state
  
     public void setStart(){
         // solucion inicial
-        this.sol= new Tree(-1);
+        //Inte
+        //for(int i= c)
     }
     
-    public void setSol(Tree<Integer> a){
+    public void setSol(ArrayList<Tree<Integer> > a){
         this.sol= a;
+    }
+    
+    public double distance(int a, int b){
+        if(numCentros < a){//a es un sensor
+            Sensor s1=sensores.get(a-numCentros);
+            Sensor s2=sensores.get(b-numCentros);
+            return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
+        }else {// a es centro
+            Centro s1= centrosDatos.get(a);
+            Sensor s2=sensores.get(b-numCentros);
+            return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
+        }
     }
     
     public double heuristic(){
@@ -53,8 +76,8 @@ public class ProbIA5Board {
     
     public ProbIA5Board copyestat(){
         ProbIA5Board a = new ProbIA5Board();
-        Tree<Integer> dif;
-        dif = sol.copy();
+        ArrayList<Tree<Integer>  > dif =new ArrayList<Tree<Integer> > ();
+       for(Tree<Integer> t : sol )dif.add(t.copy());
         a.setSol(dif);
         return a;
     }
