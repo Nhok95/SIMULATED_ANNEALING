@@ -10,8 +10,7 @@ COSAS QUE SEGURO FALTAN
  cada sensor se prueba conectar a su centro más cercano/sensor
 
 - Implementación operandos árbol(add connection, delete y change) GUILLEM 
- básicamente se usará el change para nuevos estados(para no salir de la solución)
-DONE!!!! also he cambiado toda la estructura de árboles
+ básicamente se usará el change para nuevos estados(para no salir de la solución)->DONE
 
 
 - Calculo volumen + costes(dado un árbol) ENRIQUE
