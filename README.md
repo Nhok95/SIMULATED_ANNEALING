@@ -14,3 +14,13 @@ COSAS QUE SEGURO FALTAN
 
 - Calculo volumen + costes(dado un árbol) ENRIQUE
 - Calculo heurística/s ENRIQUE
+
+
+Recuerdo a navegantes noobs: 
+git add -A
+git commit -m "hello"
+git push
+
+en caso de algun error en medio:
+git pull
+y volver a empezar
