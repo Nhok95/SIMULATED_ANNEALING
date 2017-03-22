@@ -11,6 +11,8 @@ COSAS QUE SEGURO FALTAN
 
 - Implementación operandos árbol(add connection, delete y change) GUILLEM 
  básicamente se usará el change para nuevos estados(para no salir de la solución)
+DONE!!!! also he cambiado toda la estructura de árboles
+
 
 - Calculo volumen + costes(dado un árbol) ENRIQUE
 - Calculo heurística/s ENRIQUE
