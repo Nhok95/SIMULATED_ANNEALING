@@ -18,10 +18,10 @@ COSAS QUE SEGURO FALTAN
 
 
 Recuerdo a navegantes noobs: 
-git add -A
-git commit -m "hello"
-git push
+- git add -A
+- git commit -m "hello"
+- git push
 
 en caso de algun error en medio:
-git pull
+- git pull
 y volver a empezar
