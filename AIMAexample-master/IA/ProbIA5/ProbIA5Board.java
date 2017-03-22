@@ -22,8 +22,8 @@ public class ProbIA5Board {
     */
      static public CentrosDatos centrosDatos;
     static public Sensores sensores;
-    private ArrayList<Tree <Integer> > sol;
-    //ArrayList<Integer> conex;
+    private ArrayList<Tree   > sol;
+    //ArrayList  conex;
     static  Integer numCentros=4;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
@@ -50,18 +50,18 @@ public class ProbIA5Board {
         //for(int i= c)
     }
     
-    public void setSol(ArrayList<Tree<Integer> > a){
+    public void setSol(ArrayList<Tree  > a){
         this.sol= a;
     }
     
-    public double distance(int a, int b){
+    public double distance(int a, int sensor){
         if(numCentros < a){//a es un sensor
             Sensor s1=sensores.get(a-numCentros);
-            Sensor s2=sensores.get(b-numCentros);
+            Sensor s2=sensores.get(sensor-numCentros);
             return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
         }else {// a es centro
             Centro s1= centrosDatos.get(a);
-            Sensor s2=sensores.get(b-numCentros);
+            Sensor s2=sensores.get(sensor-numCentros);
             return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
         }
     }
@@ -76,8 +76,8 @@ public class ProbIA5Board {
     
     public ProbIA5Board copyestat(){
         ProbIA5Board a = new ProbIA5Board();
-        ArrayList<Tree<Integer>  > dif =new ArrayList<Tree<Integer> > ();
-       for(Tree<Integer> t : sol )dif.add(t.copy());
+        ArrayList<Tree> dif =new ArrayList<Tree  > ();
+       for(Tree  t : sol )dif.add(t.copy());
         a.setSol(dif);
         return a;
     }

@@ -5,6 +5,7 @@
  */
 package IA.ProbIA5;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,35 +13,52 @@ import java.util.List;
  *
  * @author xarax
  */   
-public class Tree<Integer> {
+public class Tree {
         
-        private Node<Integer> root;
-
-        public Tree(Integer rootData) {
-            root = new Node<Integer>();
-            root.data = rootData;
-            root.children = new ArrayList<Node<Integer>>();
-        }
-        public class Node<Integer> {
-            private Integer data;
-            private Node<Integer> parent;
-            private List<Node<Integer>> children;
-        }
-        
-        public void copy(Node<Integer> oldNode, Node<Integer> newNode ){
-            newNode.data=oldNode.data;
-            for(Node<Integer> a: oldNode.children){
-                newNode.children.add(new Node<Integer>());
-                //per cada fill que es faci una copia
-                copy(a,newNode.children.get(newNode.children.size()));
-                //i es copii
-            }
-        }
-        
-        public Tree copy(){
-            Tree b= new Tree(this.root.data);
-            b.root = new Node<Integer>();
-            copy(this.root,b.root);
-            return b; 
+    private Integer root;
+    private ArrayList<Tree> children;
+    
+    public Tree(Integer rootData) {
+            this.root = rootData;
+            this.children = new ArrayList<Tree>();
     }
+
+    public  Tree copy() {
+        Tree b = new Tree(new Integer(this.root));
+        for(Tree x :this.children){
+            b.children.add(x.copy());
+        }
+        return b;
+    }
+ 
+    public Integer getId(){
+        return this.root;
+    }
+
+    public void setId(Integer a){
+        this.root= a;
+    }
+    public void remove(Integer ded){
+        for(Tree t:this.children) 
+            if(t.root.equals(ded))this.children.remove(t);
+    }
+    public void add(Integer baby){
+        this.children.add(this.find(baby));
+    }
+    
+    public Tree find(Integer a){
+        if(this.root.equals(a)) return this;//trobat
+        for(Tree t:this.children){
+            Tree x= t.find(a);
+            if(!! x.equals(-1)) return x;
+        }
+        return new Tree(new Integer(-1));
+    }
+    public void change(Integer pare,Integer noupare, Integer fill){
+        Tree a= find(fill),b=find(noupare),c=find(pare);
+        if(b.children.size()==2)return ;//no es pot fer
+        //palante
+        c.remove(fill);b.children.add(a);
+    }
+    
 }
