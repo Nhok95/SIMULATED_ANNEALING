@@ -22,20 +22,41 @@ public class ProbIA5Board {
     */
      static public CentrosDatos centrosDatos;
     static public Sensores sensores;
-    private ArrayList<Tree   > sol;
+    private ArrayList<Tree> sol;
     //ArrayList  conex;
     static  Integer numCentros=4;
+    static Integer numSensores=100;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
- 
+    static private ArrayList<ArrayList<Float> > distances;
+    
+    public void preparedistances(){
+        //INSTANCIAMOS
+        distances= new ArrayList<ArrayList<Float>>(numCentros+numSensores);
+        for(int i=0;i<numCentros+numSensores;i++){
+            ArrayList a= new ArrayList(numCentros+numSensores);
+            for(int j=0;j<numCentros+numSensores;j++) a.add(0);
+            distances.add(a);
+        }
+        //CALCULAMOS
+        for(int i=0;i<numCentros+numSensores;i++){
+            for(int j=0;j<numCentros+numSensores;j++)
+                if(j>=numCentros){
+                    (distances.get(i)).set(j, new Float(distance(i,j)));
+                    (distances.get(j)).set(i,new Float(distance(i,j)));
+                }
+        }
+    }
     public boolean is_goal(){
          // en principio no planteamos salirnos del 
          //espacio de soluciones en este problema 
          return true;
      }
  
-    public ProbIA5Board(){
+    public ProbIA5Board(Integer ncenters,Integer nsensores){
+        numCentros=ncenters;
+        distances=new ArrayList<ArrayList<Float> >(ncenters+nsensores);
         this.centrosDatos= new CentrosDatos(4,1234);
         this.sensores= new Sensores(100, 1234);
        // this.conex=new ArrayList();
@@ -75,7 +96,7 @@ public class ProbIA5Board {
     }
     
     public ProbIA5Board copyestat(){
-        ProbIA5Board a = new ProbIA5Board();
+        ProbIA5Board a = new ProbIA5Board(numCentros,sensores.size());
         ArrayList<Tree> dif =new ArrayList<Tree  > ();
        for(Tree  t : sol )dif.add(t.copy());
         a.setSol(dif);
