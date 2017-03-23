@@ -3,7 +3,8 @@
 COSAS QUE SEGURO FALTAN
 - Tabla distancias(floats pls) -> DONE ( GUILLEM)
 
-- Calculo nuevo estado(hay un calculo caca)
+- Calculo nuevo estado(hay un calculo caca) -> DONE más o menos y con necesidad de testear
+(GUILLEM)
 
 - Calculo estado inicial(lo mismo que arriba) JAVI
  [centro se conecta a sus 25 sensores más cercanos ,

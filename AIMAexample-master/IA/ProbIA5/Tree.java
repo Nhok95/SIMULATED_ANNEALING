@@ -34,7 +34,6 @@ public class Tree {
     public Integer getId(){
         return this.root;
     }
-
     public void setId(Integer a){
         this.root= a;
     }
@@ -42,9 +41,10 @@ public class Tree {
         for(Tree t:this.children) 
             if(t.root.equals(ded))this.children.remove(t);
     }
-    public void add(Integer baby){
-        this.children.add(this.find(baby));
+    public void add(Tree baby){
+        this.children.add(baby);
     }
+    public Integer children(){return this.children.size();} 
     
     public Tree find(Integer a){
         if(this.root.equals(a)) return this;//trobat
@@ -54,11 +54,25 @@ public class Tree {
         }
         return new Tree(new Integer(-1));
     }
+    
+    public Integer father(Integer a){
+        for(Tree t: this.children)
+            if(a.equals(t.getId())) return this.root;
+        return -1;//not found
+    }
+    
+    public Tree quickfind(Integer a){
+        for(Tree t:this.children){
+             if(t.root.equals(a)) return t;
+        }
+        return new Tree(new Integer(-1));
+    }
+    /**
     public void change(Integer pare,Integer noupare, Integer fill){
         Tree a= find(fill),b=find(noupare),c=find(pare);
         if(b.children.size()==2)return ;//no es pot fer
         //palante
         c.remove(fill);b.children.add(a);
-    }
+    }**/
     
 }

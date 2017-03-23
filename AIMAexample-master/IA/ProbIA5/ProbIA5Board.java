@@ -73,7 +73,12 @@ public class ProbIA5Board {
         return closest;
     }
     
-    
+    public int numNodos(){
+        return numCentros+numSensores;
+    }
+    public int numCentros(){
+        return numCentros;
+    }
     public boolean is_goal(){
          // en principio no planteamos salirnos del 
          //espacio de soluciones en este problema 
@@ -127,5 +132,35 @@ public class ProbIA5Board {
        for(Tree  t : sol )dif.add(t.copy());
         a.setSol(dif);
         return a;
+    }
+    
+    public Integer father(Integer x){
+        Integer a=-1;
+        for(Tree t:sol){
+             a=t.father(x);
+             if(!! a.equals(-1))break;
+        }
+        return a;
+    }
+    
+    public boolean change(Integer pare,Integer noupare, Integer fill){
+        Tree father= new Tree(-1);
+        Tree newfather = new Tree(-1);
+        int i =0;
+        while(newfather.getId().equals(-1)){
+            newfather=sol.get(i).find(noupare);
+        }
+        i=0;
+        if(newfather.children().equals(2)){
+            return false;
+        }
+        while(father.getId().equals(-1)){
+            father=sol.get(i).find(pare);
+            i++;
+        }
+        newfather.add(father.quickfind(fill));//ho trobara a al primera iteracio 
+        //aixi que es prou eficient
+        father.remove(fill);//aixo tambe es directe
+       return true;
     }
 }
