@@ -15,6 +15,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         //quizás querremos descartar unos cuantos
         ProbIA5Board board= (ProbIA5Board)state;
         ProbIA5Board board2=board.copyestat();
+        
         retval.add(board2);
         return retval;
     }
