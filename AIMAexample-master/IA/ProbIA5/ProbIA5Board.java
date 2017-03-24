@@ -269,38 +269,38 @@ public void calc_dist()
 		ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = new ArrayList<ArrayList<PairIndexDist>>(numSensores);
 		PairIndexDist P;
 		for (int i = 0; i< numSensores+numCentros; ++i) {
-			ArrayList<PairIndexDist> aux = new ArrayList<PairIndexDist>(numSensores+numCentros)
+			ArrayList<PairIndexDist> aux = new ArrayList<PairIndexDist>(numSensores+numCentros); //crea una fila de la matriz
 			for (int j = 0; j < numSensores+numCentros; ++j){
-				P.index = j;
-				P.dist = distances.get(i).get(j);
-				aux.add(P);
+				P.index = j;					  //la rellena con el indice original y la distancia de forma que los valores relevantes para definir un cable
+				P.dist = distances.get(i).get(j); //son el indice de la fila y el valor contenido en el pair, llamado index.
+				aux.add(P);				
 			}
-			Collections.sort(aux, new pairComparator());
-			distanciesOrdenades.add(aux);
+			Collections.sort(aux, new pairComparator()); //ordena cada fila segun el comparator d
+			distanciesOrdenades.add(aux);  //finalmente añade cada fila a la matriz
 		}
 		return distanciesOrdenades;
 	}
 	
 	private int NearFreeS2(int i1, int ns, ArrayList<Boolean> used, ArrayList<Integer> hijos) {
 		for (int i= 0; i<ns; ++i){
-    		int i2 = distanciesOrdenades.get(i1).get(i).index;
-    		if (used.get(i2) == true && hijos.get(i2)<2) return i2;
+    		int i2 = distanciesOrdenades.get(i1).get(i).index;  // el for va de 0(mas cercano) a ns (mas lejano) comparando si estan libres
+    		if (used.get(i2) == true && hijos.get(i2)<2) return i2; // used == true implica que solo se unira a un nodo que ya se haya tratado y este formando parte de un arbol
 		}
 		return -1;
 	}
     
     private int NearFreeS(int i1, int ns, ArrayList<Integer> hijos) {
     	for (int i= 0; i<ns; ++i){
-    		int i2 = distanciesOrdenades.get(i1).get(i).index; //index deberia ser una variable de una struct
-			if (i2 < i1 && hijos.get(i2)<2) return i2; //si esta por debajo (ya esta unido al arbol) y libre
+    		int i2 = distanciesOrdenades.get(i1).get(i).index; // el for va de 0(mas cercano) a ns (mas lejano) comparando si estan libres
+			if (i2 < i1 && hijos.get(i2)<2) return i2; //si esta por debajo (ya esta unido al arbol) y libre se le une
 		}
 		return -1;
 	}
 
 	private int NearFreeC(int i1, int ns, int nc, ArrayList<Integer> hijos) {
-		for (int i= ns; i<ns+nc; ++i){
+		for (int i= ns; i<ns+nc; ++i){ 	// el for va de ns+1 (mas cercano) a ns+nc (mas lejano) comparando si estan libres
 			int i2 = distanciesOrdenades.get(i1).get(i).index; 
-			if (hijos.get(i2)<25) return i2;
+			if (hijos.get(i2)<25) return i2; //si esta libre se le une
 		}
 		return -1;
 	}
@@ -314,11 +314,11 @@ public void calc_dist()
     	for(int i=0;i<ns;i++){
     		int n = 0;
     		if (!! saturados) {
-    			n = NearFreeC(i,ns,nc,hijos); //-1 si centros saturados
+    			n = NearFreeC(i,ns,nc,hijos);  //-1 si no encuentra centros libres: centros saturados
     			saturados = (n == -1);
     		}
             if (saturados) n = NearFreeS(i,ns, hijos); //solo debe buscar sensores por debajo de i
-            firstSol.put(i,n);
+            firstSol.put(i,n);							
             hijos.set(n, hijos.get(n)+1);
         }
     	return firstSol;
