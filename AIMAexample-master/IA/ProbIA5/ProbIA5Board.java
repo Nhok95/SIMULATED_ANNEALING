@@ -57,8 +57,8 @@ public class ProbIA5Board {
 	
 
 
-	private ArrayList<Integer> hijos = new ArrayList<Integer>(NumeroSensores); //lista de hijos de cada nodo
-	private ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = Ordenar(distances); //2a matriz ordenada
+	private ArrayList<Integer> hijos = new ArrayList<Integer>(numSensores+numCentros); //lista de hijos de cada nodo
+	private ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = new ArrayList<ArrayList<PairIndexDist>>; //2a matriz ordenada
     
 
 public void calc_dist()
@@ -307,6 +307,7 @@ public void calc_dist()
 	
 	
     public Map<Integer,Integer> Init1(int nc, int ns){
+    	distanciesOrdenades = Ordenar(distances);
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
     	Map<Integer,Integer> firstSol = new TreeMap<Integer,Integer>();
     	boolean saturados = false;
@@ -326,6 +327,7 @@ public void calc_dist()
 
 
 	public Map<Integer,Integer> Init2(int nc, int ns){
+		distanciesOrdenades = Ordenar(distances);
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
     	Map<Integer,Integer> firstSol = new TreeMap<Integer,Integer>();
     	ArrayList<Boolean> used = new ArrayList<Boolean>(ns);
