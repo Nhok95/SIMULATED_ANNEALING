@@ -122,23 +122,10 @@ public class ProbIA5Board {
     public ArrayList<Integer> get30perc(int node){
         //WARNING ALGORITMO POCO EFICIENTE
         Integer size= new Integer(30*(numCentros+numSensores)/100);
-        ArrayList<Float> closestd=new ArrayList(size);
         ArrayList<Integer> closest= new ArrayList(size);
-        int i;
         //Cogemos los 30 primeros para tener alguno
-        for(i=0;i<size;i++){
-            closest.set(i, i);
-            closestd.set(i,new Float(distance(i, node)) );
-        }
-        for(;i<numCentros+numSensores;i++){
-            //y luego para cada uno miramos si podemo
-            for(int j=0;j<size;j++){
-                if(closestd.get(j)>distances.get(i).get(j)){//tenemos uno más cerca
-                   closestd.set(j,distances.get(i).get(j));
-                   closest.set(j,i);
-                   break;//ya hemos cambiado algo por i
-                }
-            }
+        for(int i=0;i<size;i++){
+            closest.add(new Integer(this.closest.get(i).get(node)));
         }
         return closest;
     }
