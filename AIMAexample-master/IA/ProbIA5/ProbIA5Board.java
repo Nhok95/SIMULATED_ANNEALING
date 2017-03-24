@@ -69,7 +69,19 @@ public void calc_dist()
             }
         }
     }//
-    
+
+    //VOLUME Y COST DEBEN ESTAR INICIALIZADOS Y A 0!!!
+    public void volumeandcost(Integer volume, Float cost){
+        Integer nvol=new Integer(0);
+        Float ncost=new Float(0);
+        for(Tree t:sol ){
+            t.volumeandcost(nvol, ncost);
+            volume= volume+nvol;
+            ncost=ncost+ ncost;
+            nvol=0; ncost=(float)0;
+        }
+
+    }
     public void preparedistances(){
         //INSTANCIAMOS
         distances= new ArrayList<ArrayList<Float>>(numCentros+numSensores);
