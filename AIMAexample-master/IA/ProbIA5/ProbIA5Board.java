@@ -4,8 +4,8 @@ import IA.Red.Centro;
 import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
 import IA.Red.Sensores;
-import pruebas.prueba.PairIndexDist;
-import pruebas.prueba.pairComparator;
+//import pruebas.prueba.PairIndexDist;
+//import pruebas.prueba.pairComparator;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -86,7 +86,7 @@ public class ProbIA5Board {
 
 
 	private ArrayList<Integer> hijos = new ArrayList<Integer>(numSensores+numCentros); //lista de hijos de cada nodo
-	private ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = new ArrayList<ArrayList<PairIndexDist>>; //2a matriz ordenada
+	private ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = new ArrayList<ArrayList<PairIndexDist>>(); //2a matriz ordenada
    
 
     //VOLUME Y COST DEBEN ESTAR INICIALIZADOS Y A 0!!!
@@ -220,10 +220,10 @@ public class ProbIA5Board {
 	}
 	
 	
-    public Map<Integer,Integer> Init1(int nc, int ns){
+    public void Init1(int nc, int ns){
     	distanciesOrdenades = Ordenar(distances);
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
-    	Map<Integer,Integer> firstSol = new TreeMap<Integer,Integer>();
+    	
     	boolean saturados = false;
     	for(int i=0;i<ns;i++){
     		int n = 0;
@@ -232,7 +232,7 @@ public class ProbIA5Board {
     			saturados = (n == -1);
     		}
             if (saturados) n = NearFreeS(i,ns, hijos); //solo debe buscar sensores por debajo de i
-            firstSol.put(i,n);							
+            sol.get(n).add(new Tree(i));							
             hijos.set(n, hijos.get(n)+1);
         }
     	return firstSol;

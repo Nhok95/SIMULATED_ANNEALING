@@ -63,6 +63,7 @@ public class Tree {
             Tree x= t.find(a);
             if(!! x.equals(-1)) return x;
         }
+        
         return new Tree(new Integer(-1));
     }
     
