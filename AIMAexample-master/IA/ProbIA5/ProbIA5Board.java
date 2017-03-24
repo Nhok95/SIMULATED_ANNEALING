@@ -37,12 +37,37 @@ public class ProbIA5Board {
     //se busca en sensores a-numcentros 
     //else se busca en centros
     static public ArrayList<ArrayList<Float> > distances;
-    
+    static public ArrayList<ArrayList<Integer> > closest;
     static private Float[][] m_dist; //0-3 -> centros || 4-103 -> sensores
     
     static public ArrayList<Double> capacidades;//0-3 0(me va bien para calcular el volumen
     //lose demas son 1,2,5 en funcion de lo que sea
-        
+
+    
+    public void insertsort(Integer who,Integer x, ArrayList<Integer> place){
+        //pone el id del nodo x donde debe en place
+        if(place.size()==0)place.add(x);
+        else{
+            int i=0;
+            while(distances.get(x).get(who)< distances.get(place.get(i)).get(who)
+                    && distances.size()>i){
+                i++;
+            }
+            place.add(i,x);
+        }
+    }
+    
+    public void calc_cercanos(){
+        //Rellena closest con los nodos más cercanos
+        closest=new ArrayList<ArrayList<Integer>>();
+        for(int i=0;i<numCentros+numSensores;i++){
+            closest.add(new ArrayList<Integer>(0));
+            for(Integer x=0; x <numCentros+numSensores;x++){
+                insertsort(i,x,closest.get(i));
+            }
+        }
+    }
+    
 	class PairIndexDist{  // struct de la que esta formada la 2a matriz
 		public int index;
 		public Float dist;
@@ -117,6 +142,8 @@ public class ProbIA5Board {
         }
         return closest;
     }
+    
+
     
     public int numNodos(){
         return numCentros+numSensores;
