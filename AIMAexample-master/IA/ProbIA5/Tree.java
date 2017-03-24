@@ -8,6 +8,7 @@ package IA.ProbIA5;
 
 import java.util.ArrayList;
 import java.util.List;
+import static oracle.jrockit.jfr.events.Bits.intValue;
 
 /**
  *
@@ -95,10 +96,14 @@ public class Tree {
     }
     public Float square(Float x){return x*x;}
     
+    public Integer getCapacidad(Integer i){
+        return intValue(ProbIA5Board.capacidades.get(i));
+    }
+    
     public void volumeandcost(Integer volume,Float cost){
         if(this.children.equals(0)){
-            volume=volume+this.root;//tenemos el volumen
-                    cost=cost+this.root;//y el coste
+            volume=volume+getCapacidad(this.root);//tenemos el volumen
+                    //cost=cost+getCapacidad(this.root);//y el coste
         }
         else{//tenemos subproblemas a resolver
             //necesitamos calcular para cada hijo
@@ -108,11 +113,10 @@ public class Tree {
                 mysol.set(i, 0);
                 mycost.set(i, new Float(0.0));
                 this.children.get(i).volumeandcost(mysol.get(i), mycost.get(i));
-                cost=cost+mycost.get(i)*  //lo que se transmite del hijo
-                        //distancia al quadrado del hijo
+                cost=cost+mycost.get(i)+mysol.get(i)*
                         square(ProbIA5Board.distances.get(this.root).get(this.children.get(i).getId()));
             }
-            //el volumen es el suyo o el de arbols
+            //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
             volume=max(this.root*3,mysum(mysol)+this.root);
         }
     }
