@@ -36,7 +36,8 @@ public class Main {
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
         ProbIA5Board board=new ProbIA5Board(4,100);
         board.preparedistances();
-        //board.setStart();
+        board.calc_cercanos();
+//board.setStart();
         //wires en estado inicial
         Wires W = new Wires(board);
         

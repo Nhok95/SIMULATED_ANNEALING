@@ -58,7 +58,7 @@ public class ProbIA5Board {
     }
     
     public void calc_cercanos(){
-        //Rellena closest con los nodos más cercanos
+        //Rellena closest con los nodos más cercanos para cada nodo
         closest=new ArrayList<ArrayList<Integer>>();
         for(int i=0;i<numCentros+numSensores;i++){
             closest.add(new ArrayList<Integer>(0));
