@@ -34,6 +34,14 @@ public class Tree {
     public Integer getId(){
         return this.root;
     }
+    
+    /////mia
+    public Tree child(int c)
+    {
+        return this.children.get(c);
+    }
+    /////
+    
     public void setId(Integer a){
         this.root= a;
     }

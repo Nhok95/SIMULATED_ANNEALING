@@ -31,6 +31,45 @@ public class ProbIA5Board {
     //else se busca en centros
     static private ArrayList<ArrayList<Float> > distances;
     
+    static private Float[][] m_dist; //0-3 -> centros || 4-103 -> sensores
+    
+    //
+public void calc_dist()
+    {
+        int n_c = centrosDatos.size();
+        int n = n_c + sensores.size();
+        float x_var = 0.0f;
+        float y_var = 0.0f;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (i == j) m_dist[i][j] = 0.0f;
+                else if (i < n_c && j < n_c){
+                    x_var = (float)centrosDatos.get(i).getCoordX() - (float)centrosDatos.get(j).getCoordX();
+                    y_var = (float)centrosDatos.get(i).getCoordY() - (float)centrosDatos.get(j).getCoordY();
+                    
+                }
+                else if (i < n_c && j > n_c){
+                    x_var = (float)centrosDatos.get(i).getCoordX() - (float)sensores.get(j-n_c).getCoordX();
+                    y_var = (float)centrosDatos.get(i).getCoordY() - (float)sensores.get(j-n_c).getCoordY();
+                }
+                else if (i > n_c && j < n_c){
+                    x_var = (float)sensores.get(i-n_c).getCoordX() - (float)centrosDatos.get(j).getCoordX();
+                    y_var = (float)sensores.get(i-n_c).getCoordY() - (float)centrosDatos.get(j).getCoordY();
+                }
+                else{
+                    x_var = (float)sensores.get(i-n_c).getCoordX() - (float)sensores.get(j-n_c).getCoordX();
+                    y_var = (float)sensores.get(i-n_c).getCoordY() - (float)sensores.get(j-n_c).getCoordY();
+                }
+                x_var = (float) x_var*x_var;
+                y_var = (float) y_var*y_var;
+                
+                m_dist[i][j] = (float) sqrt(x_var + y_var);
+            }
+        }
+    }//
+    
     public void preparedistances(){
         //INSTANCIAMOS
         distances= new ArrayList<ArrayList<Float>>(numCentros+numSensores);
@@ -79,6 +118,81 @@ public class ProbIA5Board {
     public int numCentros(){
         return numCentros;
     }
+    
+    /////////////////////
+    public double inorden_cost(Tree t)
+    {
+        double cost = 0;
+        if (t == null)
+            return 0;
+        else
+        {
+            int id = t.getId();
+            cost = get_cost(t.child(0),id);
+            for (int i = 0; i < t.children(); i++)
+                cost += get_cost(t.child(i),id);
+        }
+        return cost;
+    }
+    
+    public double get_cost (Tree t, int id)
+    {
+        double cost = 0;
+        if (t== null)
+            return 0;
+        else 
+        {
+            int n_id = t.getId();
+            cost = get_cost(t.child(0),id);
+            float d = m_dist[n_id][id]*m_dist[n_id][id];
+            double v = sensores.get(n_id).getCapacidad();
+            cost += d*v;
+            for (int i = 0; i < t.children(); i++)
+                cost += get_cost(t.child(i),id);
+        }
+        return cost;
+    }
+    
+    public double inorden_v_tree(Tree t)
+    {
+        double v = 0;
+        if (t == null)
+            return 0;
+        else 
+        {
+            //int id = t.getId();
+            v = get_v(t.child(0), new Double (0.0));
+            for (int i = 0; i < t.children(); i++)
+                v += get_v(t.child(i),0.0);
+                
+        }
+        return v;
+        
+    }
+    public double get_v (Tree t, Double my_v)
+    {
+        double v = 0;
+        
+        if (t == null)
+            return 0.0;
+        else 
+        {
+            Double c_v =new Double (0.0);
+            int n_id = t.getId();
+            v = get_v (t.child(0),c_v);
+            double v2 = sensores.get(n_id).getCapacidad();
+            
+            for (int i = 0; i <t.children(); i++)
+            {
+                v += get_v(t.child(i), 0.0);
+            }
+        
+        }
+    }
+    //////////////
+    
+    
+    
     public boolean is_goal(){
          // en principio no planteamos salirnos del 
          //espacio de soluciones en este problema 
@@ -125,6 +239,27 @@ public class ProbIA5Board {
         //con suma, otro con una división, y quizás uno que los mezcle
         return sum;
     }
+    
+    /*
+    public double heuristic2() {
+        
+    }
+    */
+    
+    //
+    public double heuritic4( ArrayList<Tree> sol){
+        double h4 = 0;
+        double cost = 0;
+        double v_util = 0;
+        for (int i = 0; i< sol.size(); i++)
+        {
+            v_util += inorden_v_tree(sol.get(i));
+            cost += inorden_cost(sol.get(i));
+        }
+        h4 = 2*v_util - cost; 
+        return h4;
+    }
+    //
     
     public ProbIA5Board copyestat(){
         ProbIA5Board a = new ProbIA5Board(numCentros,sensores.size());
