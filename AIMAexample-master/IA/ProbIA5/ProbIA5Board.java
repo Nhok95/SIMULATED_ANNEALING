@@ -4,10 +4,17 @@ import IA.Red.Centro;
 import IA.Red.CentrosDatos;
 import IA.Red.Sensor;
 import IA.Red.Sensores;
+import pruebas.prueba.PairIndexDist;
+import pruebas.prueba.pairComparator;
+
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by bejar on 17/01/17.
@@ -33,7 +40,27 @@ public class ProbIA5Board {
     
     static private Float[][] m_dist; //0-3 -> centros || 4-103 -> sensores
     
-    //
+	class PairIndexDist{  // struct de la que esta formada la 2a matriz
+		public int index;
+		public Float dist;
+	}
+	
+	class pairComparator implements Comparator<PairIndexDist> //comparador para el sort de la 2a matriz
+	   {            
+	        public int compare(PairIndexDist p1, PairIndexDist p2)
+	        {
+	            Float a1 = p1.dist;
+	            Float a2 = p2.dist;
+	            return a1.compareTo(a2);
+	        }
+	   }
+	
+
+
+	private ArrayList<Integer> hijos = new ArrayList<Integer>(NumeroSensores); //lista de hijos de cada nodo
+	private ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = Ordenar(distances); //2a matriz ordenada
+    
+
 public void calc_dist()
     {
         int n_c = centrosDatos.size();
@@ -237,6 +264,93 @@ public void calc_dist()
             }
         }
     }
+    
+	private ArrayList<ArrayList<PairIndexDist>> Ordenar(ArrayList<ArrayList<Float>> distances){
+		ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = new ArrayList<ArrayList<PairIndexDist>>(numSensores);
+		PairIndexDist P;
+		for (int i = 0; i< numSensores+numCentros; ++i) {
+			ArrayList<PairIndexDist> aux = new ArrayList<PairIndexDist>(numSensores+numCentros)
+			for (int j = 0; j < numSensores+numCentros; ++j){
+				P.index = j;
+				P.dist = distances.get(i).get(j);
+				aux.add(P);
+			}
+			Collections.sort(aux, new pairComparator());
+			distanciesOrdenades.add(aux);
+		}
+		return distanciesOrdenades;
+	}
+	
+	private int NearFreeS2(int i1, int ns, ArrayList<Boolean> used, ArrayList<Integer> hijos) {
+		for (int i= 0; i<ns; ++i){
+    		int i2 = distanciesOrdenades.get(i1).get(i).index;
+    		if (used.get(i2) == true && hijos.get(i2)<2) return i2;
+		}
+		return -1;
+	}
+    
+    private int NearFreeS(int i1, int ns, ArrayList<Integer> hijos) {
+    	for (int i= 0; i<ns; ++i){
+    		int i2 = distanciesOrdenades.get(i1).get(i).index; //index deberia ser una variable de una struct
+			if (i2 < i1 && hijos.get(i2)<2) return i2; //si esta por debajo (ya esta unido al arbol) y libre
+		}
+		return -1;
+	}
+
+	private int NearFreeC(int i1, int ns, int nc, ArrayList<Integer> hijos) {
+		for (int i= ns; i<ns+nc; ++i){
+			int i2 = distanciesOrdenades.get(i1).get(i).index; 
+			if (hijos.get(i2)<25) return i2;
+		}
+		return -1;
+	}
+	
+	
+    public Map<Integer,Integer> Init1(int nc, int ns){
+		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
+    	Map<Integer,Integer> firstSol = new TreeMap<Integer,Integer>();
+    	boolean saturados = false;
+    	for(int i=0;i<ns;i++){
+    		int n = 0;
+    		if (!! saturados) {
+    			n = NearFreeC(i,ns,nc,hijos); //-1 si centros saturados
+    			saturados = (n == -1);
+    		}
+            if (saturados) n = NearFreeS(i,ns, hijos); //solo debe buscar sensores por debajo de i
+            firstSol.put(i,n);
+            hijos.set(n, hijos.get(n)+1);
+        }
+    	return firstSol;
+    }
+    
+
+
+	public Map<Integer,Integer> Init2(int nc, int ns){
+		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
+    	Map<Integer,Integer> firstSol = new TreeMap<Integer,Integer>();
+    	ArrayList<Boolean> used = new ArrayList<Boolean>(ns);
+    	Boolean done = false;
+    	for(int i=ns;i<ns+nc;i++){
+    		for (int j = 0; j < 25; ++j){
+    			int n = NearFreeS2(i,ns,used,hijos);
+    			done = (n == -1); 
+    			if (done) break;
+    			used.set(n,true);
+    			firstSol.put(n,i);
+    			hijos.set(i, hijos.get(i)+1);
+    		}
+    		if (done) break;
+    	}
+    	int i = used.indexOf(false);
+    	while ( i != -1 ){
+    		int n = NearFreeS2(i,ns,used,hijos);
+    		firstSol.put(i, n);
+    		hijos.set(n, hijos.get(n)+1);
+    		i = used.indexOf(false);
+    	}
+    	return firstSol;
+    }
+
     
     public void setSol(ArrayList<Tree  > a){
         this.sol= a;
