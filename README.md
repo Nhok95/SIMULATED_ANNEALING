@@ -14,7 +14,8 @@ COSAS QUE SEGURO FALTAN
  básicamente se usará el change para nuevos estados(para no salir de la solución)->DONE
 
 
-- Calculo volumen + costes(dado un árbol) ENRIQUE->(GUILLEM) DONE
+- Calculo volumen + costes(dado un árbol) ENRIQUE->(GUILLEM) DONE(hecho a a altas horas de la mañana,
+no prometo nada)
 - Calculo heurística/s ENRIQUE
 
 
