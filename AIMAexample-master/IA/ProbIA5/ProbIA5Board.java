@@ -29,7 +29,7 @@ public class ProbIA5Board {
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
-    static private ArrayList<ArrayList<Float> > distances;
+    static public ArrayList<ArrayList<Float> > distances;
     
     static private Float[][] m_dist; //0-3 -> centros || 4-103 -> sensores
     
@@ -188,6 +188,7 @@ public void calc_dist()
             }
         
         }
+        return v;
     }
     //////////////
     
@@ -211,9 +212,18 @@ public void calc_dist()
      // Some functions will be needed for creating a copy of the state
  
     public void setStart(){
-        // solucion inicial
-        //Inte
-        //for(int i= c)
+        // solucion inicial INCOMPLETA
+        //engancho todos los sensores al centro mas cercano libre
+        //o bien al sensor más cercano libre
+        Integer cand=new Integer(-1);
+        for(int i=0;i<numSensores;i++){
+            for(int j=0; j<numCentros;j++){
+                if(!! sol.get(j).children().equals(25)){
+                //candidato
+                    if(cand.equals(-1))cand=sol.get(j).getId();
+                }
+            }
+        }
     }
     
     public void setSol(ArrayList<Tree  > a){
@@ -286,7 +296,8 @@ public void calc_dist()
             newfather=sol.get(i).find(noupare);
         }
         i=0;
-        if(newfather.children().equals(2)){
+        if((noupare >= numCentros && newfather.children().equals(2)) ||
+                (noupare<numCentros && newfather.children().equals(25))){
             return false;
         }
         while(father.getId().equals(-1)){

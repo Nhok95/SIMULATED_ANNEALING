@@ -54,6 +54,8 @@ public class Tree {
     }
     public Integer children(){return this.children.size();} 
     
+    
+    public Integer volume(){return this.root;}
     public Tree find(Integer a){
         if(this.root.equals(a)) return this;//trobat
         for(Tree t:this.children){
@@ -74,6 +76,45 @@ public class Tree {
              if(t.root.equals(a)) return t;
         }
         return new Tree(new Integer(-1));
+    }
+    
+    public Integer max(Integer a,Integer b){
+        if(a>b) return b;
+        else return a;
+    }
+    
+    public Float max(Float a,Float b){
+        if(a>b) return b;
+        else return a;
+    }
+    
+    public Integer mysum(ArrayList<Integer> a){
+        Integer sum = new Integer(0);
+        for(Integer x:a)sum=sum+x;
+        return sum;
+    }
+    public Float square(Float x){return x*x;}
+    
+    public void volumeandcost(Integer volume,Float cost){
+        if(this.children.equals(0)){
+            volume=volume+this.root;//tenemos el volumen
+                    cost=cost+this.root;//y el coste
+        }
+        else{//tenemos subproblemas a resolver
+            //necesitamos calcular para cada hijo
+            ArrayList<Integer> mysol= new ArrayList(this.children());
+            ArrayList<Float> mycost=new ArrayList(this.children());
+            for(int i=0;i<this.children();i++){
+                mysol.set(i, 0);
+                mycost.set(i, new Float(0.0));
+                this.children.get(i).volumeandcost(mysol.get(i), mycost.get(i));
+                cost=cost+mycost.get(i)*  //lo que se transmite del hijo
+                        //distancia al quadrado del hijo
+                        square(ProbIA5Board.distances.get(this.root).get(this.children.get(i).getId()));
+            }
+            //el volumen es el suyo o el de arbols
+            volume=max(this.root*3,mysum(mysol)+this.root);
+        }
     }
     /**
     public void change(Integer pare,Integer noupare, Integer fill){
