@@ -49,8 +49,7 @@ public class ProbIA5Board {
         if(place.size()==0)place.add(x);
         else{
             int i=0;
-            while(distances.get(x).get(who)< distances.get(place.get(i)).get(who)
-                    && distances.size()>i){
+            while(distances.get(x).get(who).floatValue()< distances.get(place.get( i)).get(who).floatValue() && distances.size()>i){
                 i++;
             }
             place.add(i,x);
@@ -151,10 +150,10 @@ public class ProbIA5Board {
     public ProbIA5Board(Integer ncenters,Integer nsensores){
         numCentros=ncenters;
         distances=new ArrayList<ArrayList<Float> >(ncenters+nsensores);
-        this.centrosDatos= new CentrosDatos(4,1234);
-        this.sensores= new Sensores(100, 1234);
+        this.centrosDatos= new CentrosDatos(ncenters,1234);
+        this.sensores= new Sensores(nsensores, 4321);
        // this.conex=new ArrayList();
-        for(int i= 0; i<numCentros ;i++) this.sol.add(new Tree(0));
+       //for(int i= 0; i<numCentros ;i++) this.sol.add(new Tree(0));
         this.capacidades= new ArrayList();
        int i = 0;
        for(; i<numCentros;i++)capacidades.add(0.0);
@@ -181,7 +180,7 @@ public class ProbIA5Board {
     
 	private ArrayList<ArrayList<PairIndexDist>> Ordenar(ArrayList<ArrayList<Float>> distances){
 		ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = new ArrayList<ArrayList<PairIndexDist>>(numSensores);
-		PairIndexDist P;
+		PairIndexDist P = new PairIndexDist();
 		for (int i = 0; i< numSensores+numCentros; ++i) {
 			ArrayList<PairIndexDist> aux = new ArrayList<PairIndexDist>(numSensores+numCentros); //crea una fila de la matriz
 			for (int j = 0; j < numSensores+numCentros; ++j){
@@ -195,7 +194,7 @@ public class ProbIA5Board {
 		return distanciesOrdenades;
 	}
 	
-	private int NearFreeS2(int i1, int ns, ArrayList<Boolean> used, ArrayList<Integer> hijos) {
+	private int NearFreeS2(int i1, int ns, int nc, ArrayList<Boolean> used, ArrayList<Integer> hijos) {
 		for (int i= nc; i<nc+ns; ++i){
     		int i2 = distanciesOrdenades.get(i1).get(i).index;  // el for va de nc+1 (mas cercano) a nc+ns (mas lejano) comparando si estan libres
     		if (used.get(i2) == true && hijos.get(i2)<2) return i2; // used == true implica que solo se unira a un nodo que ya se haya tratado y este formando parte de un arbol
@@ -203,7 +202,7 @@ public class ProbIA5Board {
 		return -1;
 	}
     
-    private int NearFreeS(int i1, int ns, ArrayList<Integer> hijos) {
+    private int NearFreeS(int i1, int ns, int nc, ArrayList<Integer> hijos) {
     	for (int i= nc; i<nc+ns; ++i){
     		int i2 = distanciesOrdenades.get(i1).get(i).index; // el for va de nc+1 (mas cercano) a nc+ns (mas lejano) comparando si estan libres
 			if (i2 < i1 && hijos.get(i2)<2) return i2; //si esta por debajo (ya esta unido al arbol) y libre se le une
@@ -211,7 +210,7 @@ public class ProbIA5Board {
 		return -1;
 	}
 
-	private int NearFreeC(int i1, int ns, int nc, ArrayList<Integer> hijos) {
+	private int NearFreeC(int i1, int nc, ArrayList<Integer> hijos) {
 		for (int i= 0; i < nc; ++i){ 	// el for va de 0 (mas cercano) a nc (mas lejano) comparando si estan libres
 			int i2 = distanciesOrdenades.get(i1).get(i).index; 
 			if (hijos.get(i2)<25) return i2; //si esta libre se le une
@@ -220,10 +219,10 @@ public class ProbIA5Board {
 	}
 	
 	
-    public void Init1(){
+    public void init1(){
     	int nc = numCentros;
     	int ns = numSensores;
-    	for (int i =0; i< nc; ++i)sol.add(new tree(i));
+    	for (int i =0; i< nc; ++i)sol.add(new Tree(i));
     	distanciesOrdenades = Ordenar(distances);
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
     	
@@ -231,10 +230,10 @@ public class ProbIA5Board {
     	for(int i=0;i<ns;i++){
     		int n = 0;
     		if (!! saturados) {
-    			n = NearFreeC(i,ns,nc,hijos);  //-1 si no encuentra centros libres: centros saturados
+    			n = NearFreeC(i,nc,hijos);  //-1 si no encuentra centros libres: centros saturados
     			saturados = (n == -1);
     		}
-            if (saturados) n = NearFreeS(i,ns,hijos); //solo debe buscar sensores por debajo de i
+            if (saturados) n = NearFreeS(i,ns,nc,hijos); //solo debe buscar sensores por debajo de i
             sol.get(n).add(new Tree(i));							
             hijos.set(n, hijos.get(n)+1);
         }
@@ -250,7 +249,7 @@ public class ProbIA5Board {
     	Boolean done = false;
     	for(int i=ns;i<ns+nc;i++){
     		for (int j = 0; j < 25; ++j){
-    			int n = NearFreeS2(i,ns,used,hijos);
+    			int n = NearFreeS2(i,ns,nc,used,hijos);
     			done = (n == -1); 
     			if (done) break;
     			used.set(n,true);
@@ -261,7 +260,7 @@ public class ProbIA5Board {
     	}
     	int i = used.indexOf(false);
     	while ( i != -1 ){
-    		int n = NearFreeS2(i,ns,used,hijos);
+    		int n = NearFreeS2(i,ns, nc,used,hijos);
     		firstSol.put(i, n);
     		hijos.set(n, hijos.get(n)+1);
     		i = used.indexOf(false);
@@ -275,7 +274,7 @@ public class ProbIA5Board {
     }
     
     public double distance(int a, int sensor){
-        if(numCentros < a){//a es un sensor
+        if(numCentros <= a){//a es un sensor
             Sensor s1=sensores.get(a-numCentros);
             Sensor s2=sensores.get(sensor-numCentros);
             return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
