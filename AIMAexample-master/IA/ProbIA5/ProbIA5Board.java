@@ -284,7 +284,7 @@ public class ProbIA5Board {
             Sensor s1=sensores.get(a-numCentros);
             Sensor s2=sensores.get(sensor-numCentros);
             return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
-        }else {// a es centro
+        }else {// a es centro   b es sensor
             Centro s1= centrosDatos.get(a);
             Sensor s2=sensores.get(sensor-numCentros);
             return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
