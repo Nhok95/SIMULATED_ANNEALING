@@ -38,8 +38,6 @@ public class Main {
         board.preparedistances();
         board.calc_cercanos();
         board.init1();
-        //wires en estado inicial
-        Wires W = new Wires(board);
         
         //queda pendiente permitir usar SIM ANNEALING y HILL CLIMB Y ESCOGER
         Problem p = new  Problem(board,

@@ -8,7 +8,6 @@ package IA.ProbIA5;
 
 import java.util.ArrayList;
 import java.util.List;
-import static oracle.jrockit.jfr.events.Bits.intValue;
 
 /**
  *
@@ -98,7 +97,7 @@ public class Tree {
     public Float square(Float x){return x*x;}
     
     public Integer getCapacidad(Integer i){
-        return intValue(ProbIA5Board.capacidades.get(i));
+        return (ProbIA5Board.capacidades.get(i)).intValue();
     }
     
     public void volumeandcost(Integer volume,Float cost){
