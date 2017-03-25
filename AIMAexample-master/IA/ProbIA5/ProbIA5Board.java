@@ -196,23 +196,23 @@ public class ProbIA5Board {
 	}
 	
 	private int NearFreeS2(int i1, int ns, ArrayList<Boolean> used, ArrayList<Integer> hijos) {
-		for (int i= 0; i<ns; ++i){
-    		int i2 = distanciesOrdenades.get(i1).get(i).index;  // el for va de 0(mas cercano) a ns (mas lejano) comparando si estan libres
+		for (int i= nc; i<nc+ns; ++i){
+    		int i2 = distanciesOrdenades.get(i1).get(i).index;  // el for va de nc+1 (mas cercano) a nc+ns (mas lejano) comparando si estan libres
     		if (used.get(i2) == true && hijos.get(i2)<2) return i2; // used == true implica que solo se unira a un nodo que ya se haya tratado y este formando parte de un arbol
 		}
 		return -1;
 	}
     
     private int NearFreeS(int i1, int ns, ArrayList<Integer> hijos) {
-    	for (int i= 0; i<ns; ++i){
-    		int i2 = distanciesOrdenades.get(i1).get(i).index; // el for va de 0(mas cercano) a ns (mas lejano) comparando si estan libres
+    	for (int i= nc; i<nc+ns; ++i){
+    		int i2 = distanciesOrdenades.get(i1).get(i).index; // el for va de nc+1 (mas cercano) a nc+ns (mas lejano) comparando si estan libres
 			if (i2 < i1 && hijos.get(i2)<2) return i2; //si esta por debajo (ya esta unido al arbol) y libre se le une
 		}
 		return -1;
 	}
 
 	private int NearFreeC(int i1, int ns, int nc, ArrayList<Integer> hijos) {
-		for (int i= ns; i<ns+nc; ++i){ 	// el for va de ns+1 (mas cercano) a ns+nc (mas lejano) comparando si estan libres
+		for (int i= 0; i < nc; ++i){ 	// el for va de 0 (mas cercano) a nc (mas lejano) comparando si estan libres
 			int i2 = distanciesOrdenades.get(i1).get(i).index; 
 			if (hijos.get(i2)<25) return i2; //si esta libre se le une
 		}
@@ -221,6 +221,8 @@ public class ProbIA5Board {
 	
 	
     public void Init1(int nc, int ns){
+    	
+    	for (int i =0; i< nc; ++i)sol.add(new tree(i));
     	distanciesOrdenades = Ordenar(distances);
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
     	
@@ -231,11 +233,10 @@ public class ProbIA5Board {
     			n = NearFreeC(i,ns,nc,hijos);  //-1 si no encuentra centros libres: centros saturados
     			saturados = (n == -1);
     		}
-            if (saturados) n = NearFreeS(i,ns, hijos); //solo debe buscar sensores por debajo de i
+            if (saturados) n = NearFreeS(i,ns,hijos); //solo debe buscar sensores por debajo de i
             sol.get(n).add(new Tree(i));							
             hijos.set(n, hijos.get(n)+1);
         }
-    	return firstSol;
     }
     
 
