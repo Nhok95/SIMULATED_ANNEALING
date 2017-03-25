@@ -220,8 +220,9 @@ public class ProbIA5Board {
 	}
 	
 	
-    public void Init1(int nc, int ns){
-    	
+    public void Init1(){
+    	int nc = numCentros;
+    	int ns = numSensores;
     	for (int i =0; i< nc; ++i)sol.add(new tree(i));
     	distanciesOrdenades = Ordenar(distances);
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);

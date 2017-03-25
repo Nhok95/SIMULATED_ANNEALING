@@ -37,7 +37,7 @@ public class Main {
         ProbIA5Board board=new ProbIA5Board(4,100);
         board.preparedistances();
         board.calc_cercanos();
-//board.setStart();
+        board.init1();
         //wires en estado inicial
         Wires W = new Wires(board);
         
