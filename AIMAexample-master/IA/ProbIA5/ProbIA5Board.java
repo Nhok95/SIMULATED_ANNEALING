@@ -274,7 +274,13 @@ public class ProbIA5Board {
     }
     
     public double distance(int a, int sensor){
-        if(numCentros <= a){//a es un sensor
+        if(numCentros > a && numCentros > sensor){ return Double.MAX_VALUE; }//dos centros
+        else if(numCentros <= a && numCentros > sensor){//a es sensor,b es centro
+            Centro s1= centrosDatos.get(sensor);
+            Sensor s2=sensores.get(a-numCentros);
+            return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
+        }
+        else if(numCentros <= a && numCentros<= sensor){//a es un sensor b es sensor
             Sensor s1=sensores.get(a-numCentros);
             Sensor s2=sensores.get(sensor-numCentros);
             return sqrt(pow(s1.getCoordX()-s2.getCoordX(),2) +pow(s1.getCoordY()-s2.getCoordY(),2));
