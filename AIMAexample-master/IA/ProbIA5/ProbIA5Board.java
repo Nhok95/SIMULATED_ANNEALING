@@ -111,7 +111,7 @@ public class ProbIA5Board {
         //CALCULAMOS
         for(int i=0;i<numCentros+numSensores;i++){
             for(int j=0;j<numCentros+numSensores;j++)
-                if(j>=numCentros){
+                {
                     (distances.get(i)).set(j, new Float(distance(i,j)));
                     (distances.get(j)).set(i,new Float(distance(i,j)));
                 }
