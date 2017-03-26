@@ -33,10 +33,30 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception{
+        CentrosDatos centrosDatos= new CentrosDatos(4,1234);
+        Sensores sensores= new Sensores(100, 4321);
+        
+        /*for (int i = 0; i < 1; i++)
+        {
+            System.out.println("c"+i+": x-> "+centrosDatos.get(i).getCoordX()+"; y->"+centrosDatos.get(i).getCoordY());
+        }
+        System.out.println();
+        for (int i = 0; i < 4; i++)
+        {
+            System.out.println("s"+i+": x-> "+sensores.get(i).getCoordX()+"; y->"+sensores.get(i).getCoordY());
+        }*/
+        
+        
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
         ProbIA5Board board=new ProbIA5Board(4,100);
-        board.preparedistances();
+        
+        //calculo de distancias (las dos funcionan bien)
+        //board.preparedistances(); 
+        board.calc_dist();
+        
         board.calc_cercanos();
+        
+        //error en indice cuando accede a hijos
         board.init1();
         
         //queda pendiente permitir usar SIM ANNEALING y HILL CLIMB Y ESCOGER
@@ -60,7 +80,6 @@ public class Main {
 
         // You can access also to the goal state using the
 	// method getGoalState of class Search
-        
 
 
         

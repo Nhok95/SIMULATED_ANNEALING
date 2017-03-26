@@ -38,33 +38,81 @@ public class ProbIA5Board {
     //else se busca en centros
     static public ArrayList<ArrayList<Float> > distances;
     static public ArrayList<ArrayList<Integer> > closest;
-    static private Float[][] m_dist; //0-3 -> centros || 4-103 -> sensores
+    static private ArrayList<ArrayList<Float> > m_dist; //0-3 -> centros || 4-103 -> sensores
     
     static public ArrayList<Double> capacidades;//0-3 0(me va bien para calcular el volumen
     //lose demas son 1,2,5 en funcion de lo que sea
 
     
-    public void insertsort(Integer who,Integer x, ArrayList<Integer> place){
+    public void insertsort(Integer i,Integer j, ArrayList<Integer> place){
         //pone el id del nodo x donde debe en place
-        if(place.size()==0)place.add(x);
+        //System.out.println("-------------insert--------------");
+        //System.out.println("insert who: "+ who);
+        //System.out.println("insert x: "+ x);
+        if(place.size()==0) {
+            place.add(j);
+            //System.out.println( "if: added "+i+","+j+ ": "+ m_dist.get(i).get(j).floatValue());
+        }
         else{
-            int i=0;
-            while(distances.get(x).get(who).floatValue()< distances.get(place.get( i)).get(who).floatValue() && distances.size()>i){
-                i++;
+            int k=0;
+            //System.out.println(place.get(4));
+            //System.out.println("-----------");
+            /*System.out.println("i: " + i);
+            System.out.println("x: " + x);
+            System.out.println("who: " + who);
+            System.out.println("d1 (x)(who): " + distances.get(x-1).get(who).floatValue());
+            System.out.println("place i: "+place.get(i));
+            System.out.println("d2 (place(i))(who): " + distances.get(place.get(i)).get(who).floatValue());*/
+            //System.out.println("size: "+ distances.size());
+            //while(m_dist.get(x).get(who).floatValue() < m_dist.get(place.get(i)).get(who).floatValue() && m_dist.size()>i){
+            /*System.out.println("-->d1["+i+"]"+"["+j+"]:" + m_dist.get(i).get(j).floatValue());
+            System.out.println("<");
+            System.out.println("-->d2["+i+"]"+"["+place.get(k)+"]:" + m_dist.get(i).get(place.get(k)).floatValue());*/
+            while (k < place.size() && m_dist.get(i).get(j) > m_dist.get(i).get(place.get(k))){
+                k++;
+                /*System.out.println("-----------while--------");
+                System.out.println("i: " + i);
+                System.out.println("j: " + j);
+                System.out.println("k: " + k);
+                System.out.println("->d1["+i+"]"+"["+j+"]:" + m_dist.get(i).get(j).floatValue());
+                System.out.println("<");
+                System.out.println("->d2["+i+"]"+"["+place.get(k)+"]:" + m_dist.get(i).get(place.get(k)).floatValue());*/
+                
             }
-            place.add(i,x);
+            place.add(k,j);
+            
+            /*for (int l = 0; l < place.size(); l++)
+            {
+                System.out.println("place "+l+":"+place.get(l));
+            }*/
+            //System.out.println("place "+ i +" despues: "+place.get(i));
         }
     }
     
     public void calc_cercanos(){
         //Rellena closest con los nodos más cercanos para cada nodo
-        closest=new ArrayList<ArrayList<Integer>>();
+        closest=new ArrayList< ArrayList<Integer> >();
         for(int i=0;i<numCentros+numSensores;i++){
-            closest.add(new ArrayList<Integer>(0));
-            for(Integer x=0; x <numCentros+numSensores;x++){
-                insertsort(i,x,closest.get(i));
+            closest.add(new ArrayList<Integer>());
+            for(Integer j=0; j <numCentros+numSensores;j++){
+                insertsort(i,j,closest.get(i));
             }
         }
+        
+        //comprobamos
+        /*for (int i = 0; i < numCentros+numSensores; i++)
+        {
+            for (int j = 0; j < numCentros+numSensores; j++)
+            {
+                if (i <numCentros && j < numCentros) System.out.println ("closest de c"+i+": "+ closest.get(i).get(j));
+                    else if (i < numCentros && j >= numCentros) System.out.println ("closest de c"+i+": "+closest.get(i).get(j));
+                    else if (i >= numCentros && j < numCentros) System.out.println ("closest de s"+(i-numCentros)+": "+ closest.get(i).get(j));
+                    else System.out.println ("closest de s"+(i-numCentros)+": "+ closest.get(i).get(j));
+            }
+            System.out.println();
+        }*/
+        
+        
     }
     
 	class PairIndexDist{  // struct de la que esta formada la 2a matriz
@@ -116,6 +164,14 @@ public class ProbIA5Board {
                     (distances.get(j)).set(i,new Float(distance(i,j)));
                 }
         }
+        
+        //Comprobamos
+        for(int i=0;i<numCentros+numSensores;i++){
+            for(int j=0;j<numCentros+numSensores;j++)
+                {
+                    System.out.println ("distancia de "+i+" a "+j+" : "+ distances.get(i).get(j));
+                }
+        }
     }
     
     public ArrayList<Integer> get30perc(int node){
@@ -160,6 +216,7 @@ public class ProbIA5Board {
        for(;i<numCentros+numSensores;i++){
            capacidades.add(sensores.get(i-numCentros).getCapacidad());
        }
+       
     }
      // Some functions will be needed for creating a copy of the state
  
@@ -222,9 +279,21 @@ public class ProbIA5Board {
     public void init1(){
     	int nc = numCentros;
     	int ns = numSensores;
-    	for (int i =0; i< nc; ++i)sol.add(new Tree(i));
-    	distanciesOrdenades = Ordenar(distances);
-		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
+        sol = new ArrayList<Tree> (); //creamos un array 
+    	for (int i =0; i< nc; ++i) sol.add(new Tree(i));
+    	distanciesOrdenades = Ordenar(m_dist);
+        
+        System.out.println ("hijos.size0:"+hijos.size());
+        
+	for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
+        
+        System.out.println ("hijos.size:"+hijos.size());
+       
+        
+        for (int i = 0; i < hijos.size(); i++) 
+        {
+            System.out.println ("saltito :"+ hijos.get(i));
+        }
     	
     	boolean saturados = false;
     	for(int i=0;i<ns;i++){
@@ -235,7 +304,7 @@ public class ProbIA5Board {
     		}
             if (saturados) n = NearFreeS(i,ns,nc,hijos); //solo debe buscar sensores por debajo de i
             sol.get(n).add(new Tree(i));							
-            hijos.set(n, hijos.get(n)+1);
+           hijos.set(n, hijos.get(n)+1);
         }
     }
     
@@ -368,44 +437,64 @@ public class ProbIA5Board {
        return true;
     }
      
-/**
+
 public void calc_dist()
     {
         int n_c = centrosDatos.size();
+        System.out.println("n_c¨: " + n_c);
         int n = n_c + sensores.size();
+        System.out.println("n¨: " + n);
+        m_dist= new ArrayList<ArrayList<Float>>(n);
         float x_var = 0.0f;
         float y_var = 0.0f;
         for (int i = 0; i < n; i++)
         {
+            m_dist.add(new ArrayList<Float>());
             for (int j = 0; j < n; j++)
             {
-                if (i == j) m_dist[i][j] = 0.0f;
-                else if (i < n_c && j < n_c){
+                //System.out.println("i¨: " + i + "; j : " + j );
+                if (i < n_c && j < n_c){
+                    //System.out.println("if");
                     x_var = (float)centrosDatos.get(i).getCoordX() - (float)centrosDatos.get(j).getCoordX();
                     y_var = (float)centrosDatos.get(i).getCoordY() - (float)centrosDatos.get(j).getCoordY();
                     
                 }
-                else if (i < n_c && j > n_c){
+                else if (i < n_c && j >= n_c){
+                    //System.out.println("else if1");
                     x_var = (float)centrosDatos.get(i).getCoordX() - (float)sensores.get(j-n_c).getCoordX();
                     y_var = (float)centrosDatos.get(i).getCoordY() - (float)sensores.get(j-n_c).getCoordY();
+                    
                 }
-                else if (i > n_c && j < n_c){
+                else if (i >= n_c && j < n_c){
+                    //System.out.println("else if2");
                     x_var = (float)sensores.get(i-n_c).getCoordX() - (float)centrosDatos.get(j).getCoordX();
                     y_var = (float)sensores.get(i-n_c).getCoordY() - (float)centrosDatos.get(j).getCoordY();
                 }
                 else{
+                    //System.out.println("else");
                     x_var = (float)sensores.get(i-n_c).getCoordX() - (float)sensores.get(j-n_c).getCoordX();
                     y_var = (float)sensores.get(i-n_c).getCoordY() - (float)sensores.get(j-n_c).getCoordY();
                 }
                 x_var = (float) x_var*x_var;
                 y_var = (float) y_var*y_var;
                 
-                m_dist[i][j] = (float) sqrt(x_var + y_var);
+                m_dist.get(i).add(new Float(sqrt(x_var + y_var)));
             }
         }
+        //Comprobamos
+        /*for(int i=0;i<numCentros+numSensores;i++){
+            for(int j=0;j<numCentros+numSensores;j++)
+                {
+                    if (i <n_c && j < n_c) System.out.println ("distancia de c"+i+" a c"+j+" : "+ m_dist.get(i).get(j));
+                    else if (i < n_c && j >= n_c) System.out.println ("distancia de c"+i+" a s"+(j-n_c)+" : "+ m_dist.get(i).get(j));
+                    else if (i >= n_c && j < n_c) System.out.println ("distancia de s"+(i-n_c)+" a c"+j+" : "+ m_dist.get(i).get(j));
+                    else System.out.println ("distancia de s"+(i-n_c)+" a s"+(j-n_c)+" : "+ m_dist.get(i).get(j));
+                }
+            System.out.println();
+        }*/
     }
     
-    
+    /**
         /////////////////////
     public double inorden_cost(Tree t)
     {
