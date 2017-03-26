@@ -178,8 +178,8 @@ public class ProbIA5Board {
         //WARNING ALGORITMO POCO EFICIENTE
         Integer size= new Integer(30*(numCentros+numSensores)/100);
         ArrayList<Integer> closest= new ArrayList(size);
-        //Cogemos los 30 primeros para tener alguno
-        for(int i=0;i<size;i++){
+        //Cogemos el 30 % de primeros descartando el 1o(será el mismo)
+        for(int i=1;i<size+1;i++){
             closest.add(new Integer(this.closest.get(i).get(node)));
         }
         return closest;
@@ -303,6 +303,9 @@ public class ProbIA5Board {
     			saturados = (n == -1);
     		}
             if (saturados) n = NearFreeS(i,ns,nc,hijos); //solo debe buscar sensores por debajo de i
+            //Guillem : esto solo funcionará si no estan saturados los centros creo,
+            // en caso contrario se deberá buscar con la funcion(Tree.find(Integer a)) 
+            //que devuelve el árbol con Id a, y si no lo encuentra su id es -1
             sol.get(n).add(new Tree(i));							
            hijos.set(n, hijos.get(n)+1);
         }
