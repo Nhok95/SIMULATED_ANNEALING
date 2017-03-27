@@ -284,8 +284,9 @@ public class ProbIA5Board {
     	distanciesOrdenades = Ordenar(m_dist);
         
         System.out.println ("hijos.size0:"+hijos.size());
+ 
         
-	for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
+	for (int i = 0; i < numCentros+numSensores;++i) hijos.add(0);
         
         System.out.println ("hijos.size:"+hijos.size());
        
