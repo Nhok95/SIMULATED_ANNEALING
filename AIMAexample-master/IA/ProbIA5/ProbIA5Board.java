@@ -293,7 +293,7 @@ public class ProbIA5Board {
         
         for (int i = 0; i < hijos.size(); i++) 
         {
-            System.out.println ("saltito :"+ hijos.get(i));
+ //           System.out.println ("saltito :"+ hijos.get(i));
         }
     	
     	boolean saturados = false;
@@ -310,6 +310,10 @@ public class ProbIA5Board {
             sol.get(n).add(new Tree(i));							
            hijos.set(n, hijos.get(n)+1);
         }
+        printsol();
+    }
+    public void printsol(){
+        for(Tree t :sol)t.print();
     }
     
 

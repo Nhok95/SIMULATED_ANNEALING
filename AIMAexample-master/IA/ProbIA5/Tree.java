@@ -54,6 +54,11 @@ public class Tree {
     }
     public Integer children(){return this.children.size();} 
     
+    public void print(){
+            System.out.println ("Nodo "+ this.root +"  hijos:");
+            for(Tree t : children)         System.out.print (t.root+ " ");
+             for (Tree t:children) t.print();
+    }
     
     public Integer volume(){return this.root;}
     public Tree find(Integer a){
