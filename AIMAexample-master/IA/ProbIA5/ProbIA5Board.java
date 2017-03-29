@@ -297,9 +297,9 @@ public class ProbIA5Board {
     	distanciesOrdenades = Ordenar(m_dist);  
 
 
-	for (int i = 0; i < numCentros+numSensores;++i) hijos.add(0);
+	for (int i = 0; i < nc+ns;++i) hijos.add(0);
        	boolean saturados = false;
-    	for(int i=0;i<ns;i++){
+    	for(int i=nc;i<nc+ns;i++){
     		int n = 0;
     		if (! saturados) {
                     	n = NearFreeC(i,nc,hijos);  //-1 si no encuentra centros libres: centros saturados
