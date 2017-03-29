@@ -8,6 +8,8 @@ import aima.search.framework.GraphSearch;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
+import aima.search.informed.HillClimbingSearch;
+
 import aima.search.informed.AStarSearch;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +36,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         CentrosDatos centrosDatos= new CentrosDatos(4,1234);
-        Sensores sensores= new Sensores(100, 4321);
+        Sensores sensores= new Sensores(200, 4321);
         
         /*for (int i = 0; i < 1; i++)
         {
@@ -48,7 +50,7 @@ public class Main {
         
         
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
-        ProbIA5Board board=new ProbIA5Board(4,100);
+        ProbIA5Board board=new ProbIA5Board(4,200);
         
         //calculo de distancias (las dos funcionan bien)
         //board.preparedistances(); 
@@ -67,7 +69,7 @@ public class Main {
 
                 // Instantiate the search algorithm
 	// SHA DE CANVIAR LA BÚSQUEDA PER HEURISTIC HILL CL
-        Search alg = new AStarSearch(new GraphSearch());
+        Search alg = new HillClimbingSearch();
 
         // Instantiate the SearchAgent object
         SearchAgent agent = new SearchAgent(p, alg);

@@ -46,8 +46,10 @@ public class Tree {
         this.root= a;
     }
     public void remove(Integer ded){
+        Tree a= null;
         for(Tree t:this.children) 
-            if(t.root.equals(ded))this.children.remove(t);
+            if(t.root.equals(ded)){ a=t ;break;}
+        this.children.remove(a);
     }
     public void add(Tree baby){
         this.children.add(baby);
@@ -55,33 +57,50 @@ public class Tree {
     public Integer children(){return this.children.size();} 
     
     public void print(){
+            System.out.println ();
             System.out.println ("Nodo "+ this.root +"  hijos:");
             for(Tree t : children)         System.out.print (t.root+ " ");
              for (Tree t:children) t.print();
+            
     }
     
     public Integer volume(){return this.root;}
+    
     public Tree find(Integer a){
         if(this.root.equals(a)) return this;//trobat
+                    //System.out.println("mirando arbol" + this.getId() + "tamaño" + this.children());
+        Tree x= null;
         for(Tree t:this.children){
-            Tree x= t.find(a);
-            if(!! x.equals(-1)) return x;
+            x= t.find(a);
+           // System.out.println("mirando arbol" + x.getId());
+            if(x != null) {
+             //System.out.println(x.getId());
+            return x;}
         }
         
-        return new Tree(new Integer(-1));
+        return x;
     }
     
+        public Tree find(Integer a, int found){
+            Tree t= find(a);
+            
+            if(t==null)found=0;
+            else found = 1;
+           // if(t != null && a.equals(37))System.out.println("querido booleano" +found);
+            return t;
+        }
+
     public Integer father(Integer a){
         for(Tree t: this.children)
             if(a.equals(t.getId())) return this.root;
-        return -1;//not found
+        return null;//not found
     }
     
     public Tree quickfind(Integer a){
         for(Tree t:this.children){
              if(t.root.equals(a)) return t;
         }
-        return new Tree(new Integer(-1));
+        return null;
     }
     
     public Integer max(Integer a,Integer b){
@@ -114,12 +133,13 @@ public class Tree {
             //necesitamos calcular para cada hijo
             ArrayList<Integer> mysol= new ArrayList(this.children());
             ArrayList<Float> mycost=new ArrayList(this.children());
+            //System.out.println ("children:" +this.children() );
             for(int i=0;i<this.children();i++){
-                mysol.set(i, 0);
-                mycost.set(i, new Float(0.0));
+                mysol.add(0);
+                mycost.add(new Float(0.0));
                 this.children.get(i).volumeandcost(mysol.get(i), mycost.get(i));
                 cost=cost+mycost.get(i)+mysol.get(i)*
-                        square(ProbIA5Board.distances.get(this.root).get(this.children.get(i).getId()));
+                        square(ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId()));
             }
             //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
             volume=max(this.root*3,mysum(mysol)+this.root);

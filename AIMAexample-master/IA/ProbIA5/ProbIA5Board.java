@@ -32,13 +32,13 @@ public class ProbIA5Board {
     private ArrayList<Tree> sol;
     //ArrayList  conex;
     static  Integer numCentros=4;
-    static Integer numSensores=100;
+    static Integer numSensores=200;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
-    static public ArrayList<ArrayList<Float> > distances;
+    //static public ArrayList<ArrayList<Float> > distances;
     static public ArrayList<ArrayList<Integer> > closest;
-    static private ArrayList<ArrayList<Float> > m_dist; //0-3 -> centros || 4-103 -> sensores
+    static public ArrayList<ArrayList<Float> > m_dist; //0-3 -> centros || 4-103 -> sensores
     
     static public ArrayList<Double> capacidades;//0-3 0(me va bien para calcular el volumen
     //lose demas son 1,2,5 en funcion de lo que sea
@@ -148,7 +148,7 @@ public class ProbIA5Board {
         }
 
     }
-    public void preparedistances(){
+    /**public void preparedistances(){
         //INSTANCIAMOS
         distances= new ArrayList<ArrayList<Float>>(numCentros+numSensores);
         for(int i=0;i<numCentros+numSensores;i++){
@@ -173,11 +173,11 @@ public class ProbIA5Board {
                 }
         }
     }
-    
+    **/
     public ArrayList<Integer> get30perc(int node){
         //WARNING ALGORITMO POCO EFICIENTE
         Integer size= new Integer(30*(numCentros+numSensores)/100);
-        ArrayList<Integer> closest= new ArrayList(size);
+        ArrayList<Integer> closest= new ArrayList();
         //Cogemos el 30 % de primeros descartando el 1o(será el mismo)
         for(int i=1;i<size+1;i++){
             closest.add(new Integer(this.closest.get(i).get(node)));
@@ -205,7 +205,7 @@ public class ProbIA5Board {
  
     public ProbIA5Board(Integer ncenters,Integer nsensores){
         numCentros=ncenters;
-        distances=new ArrayList<ArrayList<Float> >(ncenters+nsensores);
+       // distances=new ArrayList<ArrayList<Float> >(ncenters+nsensores);
         this.centrosDatos= new CentrosDatos(ncenters,1234);
         this.sensores= new Sensores(nsensores, 4321);
        // this.conex=new ArrayList();
@@ -309,10 +309,26 @@ public class ProbIA5Board {
             //Guillem : esto solo funcionará si no estan saturados los centros creo,
             // en caso contrario se deberá buscar con la funcion(Tree.find(Integer a)) 
             //que devuelve el árbol con Id a, y si no lo encuentra su id es -1
-            sol.get(n).add(new Tree(i));							
-           hijos.set(n, hijos.get(n)+1);
+            //System.out.println(i+ " es hijo de: "+n);
+            if(!saturados) sol.get(n).add(new Tree(i));
+            else for (int j = 0; j< sol.size();++j){
+               //int m = 0;
+                if(i==195){
+                 //   System.out.println("nodo que inserto "+  i+  "nodo donde inserto" + n);
+                  //  System.out.println("dde busco"+ j);
+                }
+                
+                Tree t = sol.get(j).find(n);
+                //System.out.println("b = "+ m);
+                if (t!=null){
+                    t.add(new Tree(i));
+                 //   System.out.println("HOLA" + t.getId());
+                    break;
+                }	
+            }
+            hijos.set(n, hijos.get(n)+1);
         }
-        printsol();
+        //printsol();
     }
     public void printsol(){
         for(Tree t :sol)t.print();
@@ -322,7 +338,7 @@ public class ProbIA5Board {
 
 	public Map<Integer,Integer> Init2(int nc, int ns){
 
-		distanciesOrdenades = Ordenar(distances);
+		distanciesOrdenades = Ordenar(m_dist);
 
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
     	Map<Integer,Integer> firstSol = new TreeMap<Integer,Integer>();
@@ -419,27 +435,32 @@ public class ProbIA5Board {
     }
     
     public Integer father(Integer x){
-        Integer a=-1;
+        Integer a=null;
         for(Tree t:sol){
              a=t.father(x);
-             if(!! a.equals(-1))break;
+             if(a!=null)break;
         }
         return a;
     }
     
     public boolean change(Integer pare,Integer noupare, Integer fill){
-        Tree father= new Tree(-1);
-        Tree newfather = new Tree(-1);
+        Tree father= null;
+        Tree newfather = null;
         int i =0;
-        while(newfather.getId().equals(-1)){
+        System.out.println ( "noupare " +noupare + " fill " + fill);
+        while(newfather==null){
+            //System.out.println ("chivato1");
             newfather=sol.get(i).find(noupare);
+            i++;
         }
         i=0;
         if((noupare >= numCentros && newfather.children().equals(2)) ||
-                (noupare<numCentros && newfather.children().equals(25))){
+                (noupare < numCentros && newfather.children().equals(25))){
             return false;
         }
-        while(father.getId().equals(-1)){
+        while(father==null){
+            System.out.println ("chivato2");
+            System.out.println ("i " + i + " pare " +pare);
             father=sol.get(i).find(pare);
             i++;
         }
