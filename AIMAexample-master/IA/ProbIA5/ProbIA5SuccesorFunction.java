@@ -35,7 +35,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 if(newboard.change(board.father(i), x, i)) {
                     //System.out.println("i:" + i);
                     //System.out.println("expansion");
-                    retval.add(newboard);
+                    retval.add(new Successor((new String (i +"cambio de padre de" +board.father(i)+ " a " +x )), newboard));
                 }
             }
         }

@@ -115,6 +115,11 @@ public class Tree {
         return null;
     }
     
+    public Integer min(Integer a,Integer b){
+        if(a>b) return b;
+        else return a;
+    }
+    
     public Integer max(Integer a,Integer b){
         if(a>b) return b;
         else return a;
@@ -133,29 +138,38 @@ public class Tree {
     public Float square(Float x){return x*x;}
     
     public Integer getCapacidad(Integer i){
-        return (ProbIA5Board.capacidades.get(i)).intValue();
+        Integer cap = new Integer(ProbIA5Board.capacidades.get(i).intValue());
+        //System.out.println("cap: "+ cap);
+        return cap;
+        //return (ProbIA5Board.capacidades.get(i)).intValue();
     }
     
     public void volumeandcost(Integer volume,Float cost){
-        if(this.children.equals(0)){
+        volume = new Integer(0);cost=new Float(0);
+        if(children().equals(0)){
             volume=volume+getCapacidad(this.root);//tenemos el volumen
                     //cost=cost+getCapacidad(this.root);//y el coste
         }
         else{//tenemos subproblemas a resolver
             //necesitamos calcular para cada hijo
-            ArrayList<Integer> mysol= new ArrayList(this.children());
-            ArrayList<Float> mycost=new ArrayList(this.children());
+            ArrayList<Integer> myvol= new ArrayList();
+            ArrayList<Float> mycost=new ArrayList();
             //System.out.println ("children:" +this.children() );
             for(int i=0;i<this.children();i++){
-                mysol.add(0);
+                myvol.add(new Integer(0));
                 mycost.add(new Float(0.0));
-                this.children.get(i).volumeandcost(mysol.get(i), mycost.get(i));
-                cost=cost+mycost.get(i)+mysol.get(i)*
+                children.get(i).volumeandcost(myvol.get(i), mycost.get(i));
+                cost=cost+mycost.get(i)+myvol.get(i)*
                         square(ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId()));
             }
             //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
-            volume=max(this.root*3,mysum(mysol)+this.root);
+            System.out.println("mySum: " + mysum(myvol));
+            volume=min(getCapacidad(root)*3,mysum(myvol)+getCapacidad(root));
         }
+        System.out.println("--------------------");
+        System.out.println("nodo: " + this.root);
+        System.out.println("volume: " + volume);
+        System.out.println("cost: " + cost);
     }
     /**
     public void change(Integer pare,Integer noupare, Integer fill){

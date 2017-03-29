@@ -10,7 +10,7 @@ import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
 
-import aima.search.informed.AStarSearch;
+//import aima.search.informed.AStarSearch;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -35,8 +35,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception{
-        CentrosDatos centrosDatos= new CentrosDatos(2,1234);
-        Sensores sensores= new Sensores(100, 4321);
+        CentrosDatos centrosDatos= new CentrosDatos(1,1234);
+        Sensores sensores= new Sensores(26, 4321);
         
         /*for (int i = 0; i < 1; i++)
         {
@@ -50,7 +50,7 @@ public class Main {
         
         
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
-        ProbIA5Board board=new ProbIA5Board(2,100);
+        ProbIA5Board board=new ProbIA5Board(1,26);
         
         //calculo de distancias (las dos funcionan bien)
         //board.preparedistances(); 

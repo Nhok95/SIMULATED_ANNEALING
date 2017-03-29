@@ -31,8 +31,8 @@ public class ProbIA5Board {
     static public Sensores sensores;
     private ArrayList<Tree> sol;
     //ArrayList  conex;
-    static  Integer numCentros=2;
-    static Integer numSensores=100;
+    static  Integer numCentros=1;
+    static Integer numSensores=26;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
@@ -215,6 +215,11 @@ public class ProbIA5Board {
        for(; i<numCentros;i++)capacidades.add(0.0);
        for(;i<numCentros+numSensores;i++){
            capacidades.add(sensores.get(i-numCentros).getCapacidad());
+       }
+       
+       for (int j= 0; j < numCentros+numSensores; j++)
+       {
+          // System.out.println("cap("+j+"): " +capacidades.get(j));
        }
        
     }
@@ -449,7 +454,7 @@ public class ProbIA5Board {
         Tree father= null;
         Tree newfather = null;
         int i =0;
-        System.out.println ( "noupare " +noupare + " fill " + fill);
+        //System.out.println ( "noupare " +noupare + " fill " + fill);
         while(newfather==null){
             //System.out.println ("chivato1");
             newfather=sol.get(i).find(noupare);
