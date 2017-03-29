@@ -31,8 +31,8 @@ public class ProbIA5Board {
     static public Sensores sensores;
     private ArrayList<Tree> sol;
     //ArrayList  conex;
-    static  Integer numCentros=4;
-    static Integer numSensores=200;
+    static  Integer numCentros=2;
+    static Integer numSensores=100;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
@@ -328,7 +328,7 @@ public class ProbIA5Board {
             }
             hijos.set(n, hijos.get(n)+1);
         }
-        //printsol();
+        printsol();
     }
     public void printsol(){
         for(Tree t :sol)t.print();
@@ -444,6 +444,8 @@ public class ProbIA5Board {
     }
     
     public boolean change(Integer pare,Integer noupare, Integer fill){
+        //System.out.println ("noupare: "+noupare);
+        //System.out.println ("pare: "+ pare);
         Tree father= null;
         Tree newfather = null;
         int i =0;
@@ -459,8 +461,12 @@ public class ProbIA5Board {
             return false;
         }
         while(father==null){
-            System.out.println ("chivato2");
-            System.out.println ("i " + i + " pare " +pare);
+            //System.out.println ("chivato2");
+            //System.out.println ("i " + i + " pare " +pare);
+            /*if (i ==2) {
+                System.out.println("***********");
+                sol.get(2).print();
+            }*/
             father=sol.get(i).find(pare);
             i++;
         }

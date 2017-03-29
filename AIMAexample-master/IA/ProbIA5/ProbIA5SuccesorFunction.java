@@ -28,12 +28,13 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             for (Integer x: viables) {
                 
                 
-                System.out.println("bucle3");
+                //System.out.println("bucle3");
                 //Instanciem
                 newboard=board.copyestat();
                 //fem el canvi de pare corresponent, només si es pot
                 if(newboard.change(board.father(i), x, i)) {
-                    System.out.println("expansion");
+                    //System.out.println("i:" + i);
+                    //System.out.println("expansion");
                     retval.add(newboard);
                 }
             }

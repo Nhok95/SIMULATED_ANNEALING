@@ -78,6 +78,7 @@ public class Tree {
             return x;}
         }
         
+        
         return x;
     }
     
@@ -90,10 +91,21 @@ public class Tree {
             return t;
         }
 
-    public Integer father(Integer a){
+    /*public Integer father(Integer a){
         for(Tree t: this.children)
             if(a.equals(t.getId())) return this.root;
         return null;//not found
+    }*/
+    
+     public Integer father(Integer a){
+        Integer answer= null;
+        for(Tree t: this.children){
+            if(a.equals(t.getId())) return this.root;
+            else {
+                answer=father(t.getId());
+            }
+        }
+         return answer;
     }
     
     public Tree quickfind(Integer a){
