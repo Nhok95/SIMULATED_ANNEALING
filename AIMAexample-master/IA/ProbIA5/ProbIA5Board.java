@@ -237,17 +237,30 @@ public class ProbIA5Board {
     
 	private ArrayList<ArrayList<PairIndexDist>> Ordenar(ArrayList<ArrayList<Float>> distances){
 		ArrayList<ArrayList<PairIndexDist>> distanciesOrdenades = new ArrayList<ArrayList<PairIndexDist>>(numSensores);
-		PairIndexDist P = new PairIndexDist();
 		for (int i = 0; i< numSensores+numCentros; ++i) {
-			ArrayList<PairIndexDist> aux = new ArrayList<PairIndexDist>(numSensores+numCentros); //crea una fila de la matriz
-			for (int j = 0; j < numSensores+numCentros; ++j){
+			ArrayList<PairIndexDist> aux = new ArrayList<PairIndexDist>(numSensores+numCentros);
+                        ArrayList<PairIndexDist> aux2 = new ArrayList<PairIndexDist>(numSensores+numCentros);//crea una fila de la matriz
+			for (int j = 0; j < numCentros; ++j){
+                                PairIndexDist P = new PairIndexDist();
 				P.index = j;					  //la rellena con el indice original y la distancia de forma que los valores relevantes para definir un cable
 				P.dist = distances.get(i).get(j); //son el indice de la fila y el valor contenido en el pair, llamado index.
-				aux.add(P);				
+                                aux.add(P);	
+                        }
+                   
+                        for (int j = numCentros; j < numCentros+numSensores; ++j){
+                                PairIndexDist P = new PairIndexDist();
+				P.index = j;					  //la rellena con el indice original y la distancia de forma que los valores relevantes para definir un cable
+				P.dist = distances.get(i).get(j); //son el indice de la fila y el valor contenido en el pair, llamado index.
+				aux2.add(P);				
 			}
-			Collections.sort(aux, new pairComparator()); //ordena cada fila segun el comparator d
+                       
+        
+			Collections.sort(aux, new pairComparator()); 
+                        Collections.sort(aux2, new pairComparator());//ordena cada fila segun el comparator d
+                        aux.addAll(aux2);
 			distanciesOrdenades.add(aux);  //finalmente a�ade cada fila a la matriz
 		}
+                
 		return distanciesOrdenades;
 	}
 	
@@ -269,7 +282,7 @@ public class ProbIA5Board {
 
 	private int NearFreeC(int i1, int nc, ArrayList<Integer> hijos) {
 		for (int i= 0; i < nc; ++i){ 	// el for va de 0 (mas cercano) a nc (mas lejano) comparando si estan libres
-			int i2 = distanciesOrdenades.get(i1).get(i).index; 
+			int i2 = distanciesOrdenades.get(i1).get(i).index;
 			if (hijos.get(i2)<25) return i2; //si esta libre se le une
 		}
 		return -1;
@@ -281,26 +294,15 @@ public class ProbIA5Board {
     	int ns = numSensores;
         sol = new ArrayList<Tree> (); //creamos un array 
     	for (int i =0; i< nc; ++i) sol.add(new Tree(i));
-    	distanciesOrdenades = Ordenar(m_dist);
-        
-        System.out.println ("hijos.size0:"+hijos.size());
- 
-        
+    	distanciesOrdenades = Ordenar(m_dist);  
+
+
 	for (int i = 0; i < numCentros+numSensores;++i) hijos.add(0);
-        
-        System.out.println ("hijos.size:"+hijos.size());
-       
-        
-        for (int i = 0; i < hijos.size(); i++) 
-        {
- //           System.out.println ("saltito :"+ hijos.get(i));
-        }
-    	
-    	boolean saturados = false;
+       	boolean saturados = false;
     	for(int i=0;i<ns;i++){
     		int n = 0;
-    		if (!! saturados) {
-    			n = NearFreeC(i,nc,hijos);  //-1 si no encuentra centros libres: centros saturados
+    		if (! saturados) {
+                    	n = NearFreeC(i,nc,hijos);  //-1 si no encuentra centros libres: centros saturados
     			saturados = (n == -1);
     		}
             if (saturados) n = NearFreeS(i,ns,nc,hijos); //solo debe buscar sensores por debajo de i
@@ -319,7 +321,9 @@ public class ProbIA5Board {
 
 
 	public Map<Integer,Integer> Init2(int nc, int ns){
+
 		distanciesOrdenades = Ordenar(distances);
+
 		for (int i = 0; i < hijos.size();++i) hijos.set(i,0);
     	Map<Integer,Integer> firstSol = new TreeMap<Integer,Integer>();
     	ArrayList<Boolean> used = new ArrayList<Boolean>(ns);
