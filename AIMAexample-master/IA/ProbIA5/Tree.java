@@ -191,7 +191,7 @@ public class Tree {
     public Pair volumeandcostp(){
         Pair p=new Pair();
         if(children().equals(0)){
-            p.setVol(p.getVol() + getCapacidad(this.root));
+            p.addVol(getCapacidad(this.root));
         }
         else{
             ArrayList<Pair> myvol= new ArrayList();
@@ -203,7 +203,8 @@ public class Tree {
             }
             //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
             System.out.println("mySum: " + mysump(myvol));
-            p.setVol(min(getCapacidad(root)*3,mysump(myvol)+getCapacidad(root)));//volume=;
+            if(this.root>=ProbIA5Board.numCentros)p.addVol(min(getCapacidad(root)*3,mysump(myvol)+getCapacidad(root)));//volume=;
+            else p.addVol(mysump(myvol));
         }
         System.out.println("--------------------");
         System.out.println("nodo: " + this.root);
