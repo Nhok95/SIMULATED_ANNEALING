@@ -400,12 +400,13 @@ public class ProbIA5Board {
         //falta implementar cada uno de los heuristicos, uno que funcione
         //con suma, otro con una división, y quizás uno que los mezcle
         Float cost = new Float(0);
+        Pair p;
         Integer v_util = new Integer(0),vtotal= new Integer(0);
         for (int i = 0; i< sol.size(); i++)
         {
-            sol.get(i).volumeandcost(v_util,cost);
-            vtotal=vtotal+v_util;
-            v_util=0;
+            p=sol.get(i).volumeandcostp();
+            vtotal=vtotal+p.getVol();
+            cost=cost+p.getCost();
         }
         sum = heuristic2(vtotal,cost); 
         //sum = heuristic3(vtotal,cost); 

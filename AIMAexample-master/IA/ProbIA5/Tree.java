@@ -178,5 +178,38 @@ public class Tree {
         //palante
         c.remove(fill);b.children.add(a);
     }**/
-    
+        public int mysump(ArrayList<Pair> a){
+        Integer sum = 0;
+        for(Pair x:a){
+            sum= sum+ x.getVol();
+            System.out.println("sumando: "+ sum);
+        }
+        return sum;
+    }
+        
+    //FUNCION PARA TREEE
+    public Pair volumeandcostp(){
+        Pair p=new Pair();
+        if(children().equals(0)){
+            p.setVol(p.getVol() + getCapacidad(this.root));
+        }
+        else{
+            ArrayList<Pair> myvol= new ArrayList();
+            for(int i=0;i<this.children();i++){
+                myvol.add(children.get(i).volumeandcostp());                
+                //System.out.println("valor despues de llamada recursiva del nodo"+ root+ " a " + i +" vol: " + myvol.get(i).getVol() + " cost: " + myvol.get(i).getCost());
+                p.addCost(myvol.get(i).getCost()+ myvol.get(i).getVol()* //;cost=cost+mycost.get(i)+myvol.get(i)*
+                        square(ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId())));
+            }
+            //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
+            System.out.println("mySum: " + mysump(myvol));
+            p.setVol(min(getCapacidad(root)*3,mysump(myvol)+getCapacidad(root)));//volume=;
+        }
+        System.out.println("--------------------");
+        System.out.println("nodo: " + this.root);
+        System.out.println("volume: " + p.getVol());
+        System.out.println("cost: " + p.getCost());
+        return p;
+    }
+ 
 }
