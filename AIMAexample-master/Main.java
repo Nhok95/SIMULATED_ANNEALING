@@ -61,6 +61,7 @@ public class Main {
         //error en indice cuando accede a hijos
         board.init1();
         
+        board.squaringdist();
         //queda pendiente permitir usar SIM ANNEALING y HILL CLIMB Y ESCOGER
         Problem p = new  Problem(board,
                                 new ProbIA5SuccesorFunction(),

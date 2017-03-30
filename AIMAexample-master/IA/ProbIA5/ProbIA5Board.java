@@ -148,6 +148,14 @@ public class ProbIA5Board {
         }
 
     }
+        public Float square(Float x){return x*x;}
+        public void squaringdist(){
+            for(ArrayList<Float> x : m_dist){
+                for(Float f: x){
+                    f=square(f);
+                }
+            }
+        }
     /**public void preparedistances(){
         //INSTANCIAMOS
         distances= new ArrayList<ArrayList<Float>>(numCentros+numSensores);

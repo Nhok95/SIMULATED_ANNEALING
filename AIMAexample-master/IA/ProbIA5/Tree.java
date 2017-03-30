@@ -160,7 +160,7 @@ public class Tree {
                 mycost.add(new Float(0.0));
                 children.get(i).volumeandcost(myvol.get(i), mycost.get(i));
                 cost=cost+mycost.get(i)+myvol.get(i)*
-                        square(ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId()));
+                        ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId());
             }
             //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
             System.out.println("mySum: " + mysum(myvol));
@@ -199,7 +199,9 @@ public class Tree {
                 myvol.add(children.get(i).volumeandcostp());                
                 //System.out.println("valor despues de llamada recursiva del nodo"+ root+ " a " + i +" vol: " + myvol.get(i).getVol() + " cost: " + myvol.get(i).getCost());
                 p.addCost(myvol.get(i).getCost()+ myvol.get(i).getVol()* //;cost=cost+mycost.get(i)+myvol.get(i)*
-                        square(ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId())));
+                        //square(ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId())));
+                        ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId()));
+
             }
             //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
             System.out.println("mySum: " + mysump(myvol));
