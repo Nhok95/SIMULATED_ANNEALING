@@ -66,7 +66,8 @@ public class ProbIA5Board {
         }
         
         //comprobamos
-        /*for (int i = 0; i < closest.size(); i++)
+        /*
+        for (int i = 0; i < closest.size(); i++)
         {
             for (int j = 0; j < closest.get(0).size(); j++)
             {
@@ -150,13 +151,14 @@ public class ProbIA5Board {
     **/
     public ArrayList<Integer> get30perc(int node){
         //WARNING ALGORITMO POCO EFICIENTE
-        Integer size= new Integer(30*(numCentros+numSensores)/100);
-        ArrayList<Integer> closest= new ArrayList();
+        Integer size= new Integer(50*(numCentros+numSensores)/100);
+        ArrayList<Integer> closest30= new ArrayList();
         //Cogemos el 30 % de primeros descartando el 1o(será el mismo)
         for(int i=1;i<size+1;i++){
-            closest.add(new Integer(this.closest.get(i).get(node)));
+            //closest30.add(new Integer(this.closest.get(i).get(node)));
+            closest30.add(new Integer(this.closest.get(node).get(i)));
         }
-        return closest;
+        return closest30;
     }
     
 
@@ -431,7 +433,11 @@ public class ProbIA5Board {
     
     public boolean change(Integer pare,Integer noupare, Integer fill){
         
-        System.out.println ("----------change----------");
+        System.out.println ("----------> change ("+fill+" -> "+ pare+" to "+fill+" -> "+ noupare+").");
+        if(fill.equals(noupare) || noupare.equals(pare)) {
+            System.out.println("SPARTAAAA!!!!!!!");
+            return false;
+        }
         
         System.out.println ("------> print antes1");
         sol.get(0).print();
@@ -447,17 +453,18 @@ public class ProbIA5Board {
             System.out.println ("chivato1");
             System.out.println("i: "+i);
             newfather=sol.get(i).find(noupare);
-            System.out.println("res: "+ newfather.getId());
+            System.out.println("newfather: "+ newfather.getId());
             
             i++;
         }
         i=0;
         if(fill==noupare || fill == pare) System.out.println("ERROR FILL == PARES");
-        if(fill.equals(noupare)) return false;
         if((noupare >= numCentros && newfather.children().equals(2)) ||
                 (noupare < numCentros && newfather.children().equals(25))){
+            System.out.println("DOBLEEEEE IFFFFFFFFF");
             return false;
         }
+        System.out.println("GOD FATHER: " + father);
         while(father==null){
             System.out.println ("chivato2");
             System.out.println ("i " + i + " pare " +pare);
