@@ -32,7 +32,7 @@ public class ProbIA5Board {
     private ArrayList<Tree> sol;
     //ArrayList  conex;
     static  Integer numCentros=1;
-    static Integer numSensores=26;
+    static Integer numSensores=5;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
@@ -45,47 +45,13 @@ public class ProbIA5Board {
 
     
     public void insertsort(Integer i,Integer j, ArrayList<Integer> place){
-        //pone el id del nodo x donde debe en place
-        //System.out.println("-------------insert--------------");
-        //System.out.println("insert who: "+ who);
-        //System.out.println("insert x: "+ x);
-        if(place.size()==0) {
-            place.add(j);
-            //System.out.println( "if: added "+i+","+j+ ": "+ m_dist.get(i).get(j).floatValue());
-        }
+        if(place.size()==0) place.add(j);
         else{
             int k=0;
-            //System.out.println(place.get(4));
-            //System.out.println("-----------");
-            /*System.out.println("i: " + i);
-            System.out.println("x: " + x);
-            System.out.println("who: " + who);
-            System.out.println("d1 (x)(who): " + distances.get(x-1).get(who).floatValue());
-            System.out.println("place i: "+place.get(i));
-            System.out.println("d2 (place(i))(who): " + distances.get(place.get(i)).get(who).floatValue());*/
-            //System.out.println("size: "+ distances.size());
-            //while(m_dist.get(x).get(who).floatValue() < m_dist.get(place.get(i)).get(who).floatValue() && m_dist.size()>i){
-            /*System.out.println("-->d1["+i+"]"+"["+j+"]:" + m_dist.get(i).get(j).floatValue());
-            System.out.println("<");
-            System.out.println("-->d2["+i+"]"+"["+place.get(k)+"]:" + m_dist.get(i).get(place.get(k)).floatValue());*/
             while (k < place.size() && m_dist.get(i).get(j) > m_dist.get(i).get(place.get(k))){
                 k++;
-                /*System.out.println("-----------while--------");
-                System.out.println("i: " + i);
-                System.out.println("j: " + j);
-                System.out.println("k: " + k);
-                System.out.println("->d1["+i+"]"+"["+j+"]:" + m_dist.get(i).get(j).floatValue());
-                System.out.println("<");
-                System.out.println("->d2["+i+"]"+"["+place.get(k)+"]:" + m_dist.get(i).get(place.get(k)).floatValue());*/
-                
             }
             place.add(k,j);
-            
-            /*for (int l = 0; l < place.size(); l++)
-            {
-                System.out.println("place "+l+":"+place.get(l));
-            }*/
-            //System.out.println("place "+ i +" despues: "+place.get(i));
         }
     }
     
@@ -100,9 +66,9 @@ public class ProbIA5Board {
         }
         
         //comprobamos
-        /*for (int i = 0; i < numCentros+numSensores; i++)
+        /*for (int i = 0; i < closest.size(); i++)
         {
-            for (int j = 0; j < numCentros+numSensores; j++)
+            for (int j = 0; j < closest.get(0).size(); j++)
             {
                 if (i <numCentros && j < numCentros) System.out.println ("closest de c"+i+": "+ closest.get(i).get(j));
                     else if (i < numCentros && j >= numCentros) System.out.println ("closest de c"+i+": "+closest.get(i).get(j));
@@ -405,6 +371,8 @@ public class ProbIA5Board {
     public double heuristic(){
         // compute the number of coins out of place respect to solution
         double sum =0;
+        
+        //System.out.println("------heuristic-------");
         //falta implementar cada uno de los heuristicos, uno que funcione
         //con suma, otro con una división, y quizás uno que los mezcle
         Float cost = new Float(0);
@@ -413,6 +381,8 @@ public class ProbIA5Board {
         for (int i = 0; i< sol.size(); i++)
         {
             p=sol.get(i).volumeandcostp();
+            //System.out.println("-----> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
+            
             vtotal=vtotal+p.getVol();
             cost=cost+p.getCost();
         }
@@ -442,7 +412,7 @@ public class ProbIA5Board {
     
     public ProbIA5Board copyestat(){
         ProbIA5Board a = new ProbIA5Board(numCentros,sensores.size());
-        ArrayList<Tree> dif =new ArrayList<Tree  > ();
+        ArrayList<Tree> dif =new ArrayList();
        for(Tree  t : sol )dif.add(t.copy());
         a.setSol(dif);
         return a;
@@ -458,25 +428,34 @@ public class ProbIA5Board {
     }
     
     public boolean change(Integer pare,Integer noupare, Integer fill){
-        //System.out.println ("noupare: "+noupare);
-        //System.out.println ("pare: "+ pare);
+        
+        System.out.println ("----------change----------");
+        System.out.println ("print 0");
+        sol.get(0).print();
+        System.out.println ("noupare: "+noupare);
+        System.out.println ("pare: "+ pare);
         Tree father= null;
         Tree newfather = null;
         int i =0;
-        //System.out.println ( "noupare " +noupare + " fill " + fill);
+        System.out.println ( "noupare " +noupare + " fill " + fill);
         while(newfather==null){
-            //System.out.println ("chivato1");
+            System.out.println ("chivato1");
+            System.out.println("i: "+i);
             newfather=sol.get(i).find(noupare);
+            System.out.println("res: "+ newfather);
+            
             i++;
         }
         i=0;
+        if(fill==noupare) return false;
+        if(fill.equals(noupare)) return false;
         if((noupare >= numCentros && newfather.children().equals(2)) ||
                 (noupare < numCentros && newfather.children().equals(25))){
             return false;
         }
         while(father==null){
-            //System.out.println ("chivato2");
-            //System.out.println ("i " + i + " pare " +pare);
+            System.out.println ("chivato2");
+            System.out.println ("i " + i + " pare " +pare);
             /*if (i ==2) {
                 System.out.println("***********");
                 sol.get(2).print();
@@ -484,9 +463,12 @@ public class ProbIA5Board {
             father=sol.get(i).find(pare);
             i++;
         }
+        if (father==null || newfather == null) System.out.println("ERROR!!!!!!!!!!");
         newfather.add(father.quickfind(fill));//ho trobara a al primera iteracio 
         //aixi que es prou eficient
         father.remove(fill);//aixo tambe es directe
+        System.out.println ("print 1");
+        sol.get(0).print();
        return true;
     }
      
@@ -531,7 +513,10 @@ public void calc_dist()
                 x_var = (float) x_var*x_var;
                 y_var = (float) y_var*y_var;
                 
-                m_dist.get(i).add(new Float(sqrt(x_var + y_var)));
+                Float dist = new Float(sqrt(x_var + y_var));
+                
+                m_dist.get(i).add(dist*dist);
+                //m_dist.get(i).add(dist);
             }
         }
         //Comprobamos
@@ -626,4 +611,25 @@ public void calc_dist()
     
     
     **/
+
+public void printdist(){
+        System.out.println("dist");
+        for(int i = 0; i<m_dist.size() ; i++){
+            System.out.println(i + " :" );
+            for(int j = 0; j<m_dist.size();j++){
+                System.out.print(m_dist.get(i).get(j) +" ");
+            }
+            System.out.println();
+        }
+    }
+    public void printclose(){
+        System.out.println("close");
+        for(int i = 0; i<m_dist.size() ; i++){
+            System.out.println(i + " :" );
+            for(int j = 0; j<m_dist.size();j++){
+                System.out.print(closest.get(i).get(j) +" ");
+            }
+            System.out.println();
+        }
+    }
 }

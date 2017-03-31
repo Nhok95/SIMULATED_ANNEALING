@@ -16,17 +16,17 @@ import java.util.List;
 public class Tree {
         
     private Integer root;
-    private ArrayList<Tree> children;
+    private ArrayList<Tree> children= new ArrayList();
     
     public Tree(Integer rootData) {
             this.root = rootData;
-            this.children = new ArrayList<Tree>();
+            this.children = new ArrayList();
     }
 
     public  Tree copy() {
         Tree b = new Tree(new Integer(this.root));
         for(Tree x :this.children){
-            b.children.add(x.copy());
+            b.add(x.copy());
         }
         return b;
     }
@@ -58,7 +58,7 @@ public class Tree {
     
     public void print(){
             System.out.println ();
-            System.out.println ("Nodo "+ this.root +"  hijos:");
+            System.out.println ("Nodo "+ this.root +"(size: " + children.size()+ ")  hijos:");
             for(Tree t : children)         System.out.print (t.root+ " ");
              for (Tree t:children) t.print();
             
@@ -67,29 +67,46 @@ public class Tree {
     public Integer volume(){return this.root;}
     
     public Tree find(Integer a){
-        if(this.root.equals(a)) return this;//trobat
-                    //System.out.println("mirando arbol" + this.getId() + "tamaño" + this.children());
-        Tree x= null;
-        for(Tree t:this.children){
-            x= t.find(a);
-           // System.out.println("mirando arbol" + x.getId());
-            if(x != null) {
-             //System.out.println(x.getId());
-            return x;}
+        Tree x = null;
+        if (this.root != null){
+            System.out.println ("+++++find: "+a);
+            
+
+            System.out.println("mirando arbol " + this.getId() + " tamaño " + this.children());
+            if(this.root.equals(a)) {
+                System.out.println ("mirando: "+this.root);
+                x = this;
+                return x;
+            }//trobat
+            else {
+                System.out.println("children size: "+ this.children.size());
+                //for(Tree t:this.children){
+                if(this.children.size() > 0) {
+                    x= this.children.get(0).find(a);
+                    int i = 1;
+                    while (x ==  null && i < this.children.size()) {
+                        x= this.children.get(i).find(a);
+                        i++;
+                    }
+                    //if (x == null) System.out.println("x es null");
+                    System.out.println("mirando arbol" + x.getId());
+
+                }
+                System.out.println("fi for");
+            }
         }
-        
-        
+        System.out.println("+++++fin find");
         return x;
     }
     
-        public Tree find(Integer a, int found){
+        /*public Tree find(Integer a, int found){
             Tree t= find(a);
             
             if(t==null)found=0;
             else found = 1;
            // if(t != null && a.equals(37))System.out.println("querido booleano" +found);
             return t;
-        }
+        }*/
 
     /*public Integer father(Integer a){
         for(Tree t: this.children)
@@ -145,6 +162,7 @@ public class Tree {
     }
     
     public void volumeandcost(Integer volume,Float cost){
+        System.out.println("--------------------");
         volume = new Integer(0);cost=new Float(0);
         if(children().equals(0)){
             volume=volume+getCapacidad(this.root);//tenemos el volumen
@@ -163,10 +181,9 @@ public class Tree {
                         ProbIA5Board.m_dist.get(this.root).get(this.children.get(i).getId());
             }
             //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
-            System.out.println("mySum: " + mysum(myvol));
+            //System.out.println("mySum: " + mysum(myvol));
             volume=min(getCapacidad(root)*3,mysum(myvol)+getCapacidad(root));
         }
-        System.out.println("--------------------");
         System.out.println("nodo: " + this.root);
         System.out.println("volume: " + volume);
         System.out.println("cost: " + cost);
@@ -182,20 +199,28 @@ public class Tree {
         Integer sum = 0;
         for(Pair x:a){
             sum= sum+ x.getVol();
-            System.out.println("sumando: "+ sum);
+            //System.out.println("sumando: "+ sum);
         }
         return sum;
     }
         
     //FUNCION PARA TREEE
     public Pair volumeandcostp(){
+        //System.out.println("---------v&ctp-----------");
+        //System.out.println("nodo: " + this.root);
         Pair p=new Pair();
+        //if (this == null) System.out.println ("ERROR FATAL!!");
         if(children().equals(0)){
             p.addVol(getCapacidad(this.root));
         }
         else{
+            //System.out.println("---------else-----------");
             ArrayList<Pair> myvol= new ArrayList();
             for(int i=0;i<this.children();i++){
+                /*System.out.println("children size: "+ children.size());
+                System.out.println("iteration i: "+ i);
+                System.out.println("children: " + children.get(i).root);
+                */
                 myvol.add(children.get(i).volumeandcostp());                
                 //System.out.println("valor despues de llamada recursiva del nodo"+ root+ " a " + i +" vol: " + myvol.get(i).getVol() + " cost: " + myvol.get(i).getCost());
                 p.addCost(myvol.get(i).getCost()+ myvol.get(i).getVol()* //;cost=cost+mycost.get(i)+myvol.get(i)*
@@ -204,14 +229,14 @@ public class Tree {
 
             }
             //el volumen es como mucho 3 veces el suyo, o todo lo que recibe
-            System.out.println("mySum: " + mysump(myvol));
+            //System.out.println("mySum: " + mysump(myvol));
             if(this.root>=ProbIA5Board.numCentros)p.addVol(min(getCapacidad(root)*3,mysump(myvol)+getCapacidad(root)));//volume=;
             else p.addVol(mysump(myvol));
         }
-        System.out.println("--------------------");
-        System.out.println("nodo: " + this.root);
-        System.out.println("volume: " + p.getVol());
-        System.out.println("cost: " + p.getCost());
+        
+        
+        //System.out.println("volume("+ this.root+"): " + p.getVol());
+        //System.out.println("cost("+this.root +"): " + p.getCost());
         return p;
     }
  

@@ -36,7 +36,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         CentrosDatos centrosDatos= new CentrosDatos(1,1234);
-        Sensores sensores= new Sensores(26, 4321);
+        Sensores sensores= new Sensores(5, 4321);
         
         /*for (int i = 0; i < 1; i++)
         {
@@ -50,7 +50,7 @@ public class Main {
         
         
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
-        ProbIA5Board board=new ProbIA5Board(1,26);
+        ProbIA5Board board=new ProbIA5Board(1,5);
         
         //calculo de distancias (las dos funcionan bien)
         //board.preparedistances(); 
@@ -58,10 +58,13 @@ public class Main {
         
         board.calc_cercanos();
         
+        board.printdist();
+        board.printclose();
+       
         //error en indice cuando accede a hijos
         board.init1();
         
-        board.squaringdist();
+        //board.squaringdist();
         //queda pendiente permitir usar SIM ANNEALING y HILL CLIMB Y ESCOGER
         Problem p = new  Problem(board,
                                 new ProbIA5SuccesorFunction(),
