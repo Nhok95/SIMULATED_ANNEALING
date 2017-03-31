@@ -381,7 +381,9 @@ public class ProbIA5Board {
         for (int i = 0; i< sol.size(); i++)
         {
             p=sol.get(i).volumeandcostp();
-            //System.out.println("-----> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
+            System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
+            sol.get(0).print();
+            System.out.println("*********************************");
             
             vtotal=vtotal+p.getVol();
             cost=cost+p.getCost();
@@ -430,8 +432,11 @@ public class ProbIA5Board {
     public boolean change(Integer pare,Integer noupare, Integer fill){
         
         System.out.println ("----------change----------");
-        System.out.println ("print 0");
+        
+        System.out.println ("------> print antes1");
         sol.get(0).print();
+        System.out.println ("------> print antes2");
+        
         System.out.println ("noupare: "+noupare);
         System.out.println ("pare: "+ pare);
         Tree father= null;
@@ -442,12 +447,12 @@ public class ProbIA5Board {
             System.out.println ("chivato1");
             System.out.println("i: "+i);
             newfather=sol.get(i).find(noupare);
-            System.out.println("res: "+ newfather);
+            System.out.println("res: "+ newfather.getId());
             
             i++;
         }
         i=0;
-        if(fill==noupare) return false;
+        if(fill==noupare || fill == pare) System.out.println("ERROR FILL == PARES");
         if(fill.equals(noupare)) return false;
         if((noupare >= numCentros && newfather.children().equals(2)) ||
                 (noupare < numCentros && newfather.children().equals(25))){
@@ -463,12 +468,14 @@ public class ProbIA5Board {
             father=sol.get(i).find(pare);
             i++;
         }
-        if (father==null || newfather == null) System.out.println("ERROR!!!!!!!!!!");
+        //if (father.getId() == fill || newfather.getId() == fill) System.out.println("ERROR!!!!!!!!!!");
+        
         newfather.add(father.quickfind(fill));//ho trobara a al primera iteracio 
         //aixi que es prou eficient
         father.remove(fill);//aixo tambe es directe
-        System.out.println ("print 1");
+        System.out.println ("------> print despues1");
         sol.get(0).print();
+        System.out.println ("------> print despues2");
        return true;
     }
      
