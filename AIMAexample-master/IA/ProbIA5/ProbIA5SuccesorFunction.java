@@ -28,7 +28,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             
             //provem a crear una solucio per cadascun dels intercanvis
             for (Integer x: viables) {
-                System.out.println("viables size: "+ viables.size());
+                //System.out.println("viables size: "+ viables.size());
                 
                 //System.out.println("bucle3");
                 //Instanciem

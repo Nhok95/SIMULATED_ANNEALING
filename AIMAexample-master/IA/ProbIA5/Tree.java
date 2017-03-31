@@ -83,13 +83,14 @@ public class Tree {
                 //for(Tree t:this.children){
                 if(this.children.size() > 0) {
                     x= this.children.get(0).find(a);
+                    System.out.println("x de "+this.children.get(0).getId()+" es:"+ x);
                     int i = 1;
                     while (x ==  null && i < this.children.size()) {
                         x= this.children.get(i).find(a);
                         i++;
                     }
-                    //if (x == null) System.out.println("x es null");
-                    System.out.println("mirando arbol" + x.getId());
+                    if (x == null) System.out.println("x es null");
+                    else System.out.println("mirando arbol" + x.getId());
 
                 }
                 System.out.println("fi for");
