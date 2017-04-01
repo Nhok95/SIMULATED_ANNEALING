@@ -118,15 +118,26 @@ public class Tree {
         return null;//not found
     }*/
     
-     public Integer father(Integer a){
+     public Integer father(Tree f, Integer fill){
+         //System.out.println("soy "+fill+", BUSCO A MI FADEEER");
         Integer answer= null;
-        for(Tree t: this.children){
-            if(a.equals(t.getId())) return this.root;
+        for(Tree t: f.children){
+            //System.out.println("SOY EL ARBOL: " + t.getId());
+            
+            if(fill.equals(t.getId())) {
+               /* System.out.println("fill: "+fill+" equal "+t.getId());
+                System.out.println("f.root: "+ f.getId());
+                System.out.println();*/
+                return f.getId();
+            }
             else {
-                answer=father(t.getId());
+                //System.out.println("ELSABROSO");
+                answer=father(t, fill);
+                if (answer != null) return answer;
             }
         }
-         return answer;
+        //System.out.println("devuelvo: "+ answer);
+        return answer;
     }
     
     public Tree quickfind(Integer a){
@@ -166,7 +177,7 @@ public class Tree {
     }
     
     public void volumeandcost(Integer volume,Float cost){
-        System.out.println("--------------------");
+        //System.out.println("--------------------");
         volume = new Integer(0);cost=new Float(0);
         if(children().equals(0)){
             volume=volume+getCapacidad(this.root);//tenemos el volumen
@@ -188,9 +199,9 @@ public class Tree {
             //System.out.println("mySum: " + mysum(myvol));
             volume=min(getCapacidad(root)*3,mysum(myvol)+getCapacidad(root));
         }
-        System.out.println("nodo: " + this.root);
+        /*System.out.println("nodo: " + this.root);
         System.out.println("volume: " + volume);
-        System.out.println("cost: " + cost);
+        System.out.println("cost: " + cost);*/
     }
     /**
     public void change(Integer pare,Integer noupare, Integer fill){
@@ -210,8 +221,8 @@ public class Tree {
         
     //FUNCION PARA TREEE
     public Pair volumeandcostp(){
-        System.out.println("---------v&ctp-----------");
-        System.out.println("nodo: " + this.root);
+        //System.out.println("---------v&ctp-----------");
+        //System.out.println("nodo: " + this.root);
         Pair p=new Pair();
         if (this == null) System.out.println ("ERROR FATAL!!");
         if(children().equals(0)){
@@ -221,9 +232,9 @@ public class Tree {
             //System.out.println("---------else-----------");
             ArrayList<Pair> myvol= new ArrayList();
             for(int i=0;i<this.children();i++){
-                System.out.println("children size: "+ children.size());
+               /* System.out.println("children size: "+ children.size());
                 System.out.println("iteration i: "+ i);
-                System.out.println("children: " + children.get(i).root);
+                System.out.println("children: " + children.get(i).root);*/
                 
                 myvol.add(children.get(i).volumeandcostp());                
                 //System.out.println("valor despues de llamada recursiva del nodo"+ root+ " a " + i +" vol: " + myvol.get(i).getVol() + " cost: " + myvol.get(i).getCost());

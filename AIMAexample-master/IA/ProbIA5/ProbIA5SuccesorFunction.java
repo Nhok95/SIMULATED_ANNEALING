@@ -34,11 +34,11 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 //Instanciem
                 newboard=board.copyestat();
                 //fem el canvi de pare corresponent, només si es pot
-                System.out.println("SUCCESSOR FUNCTION: (x): "+x+"; (i): "+i);
+                //System.out.println("SUCCESSOR FUNCTION: (MiFADER): "+board.father(i)+"; (x): "+x+"; (i): "+i);
                 if(newboard.change(board.father(i), x, i)) {
                     //System.out.println("i:" + i);
-                    System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
-                    retval.add(new Successor((new String (i +"cambio de padre de" +board.father(i)+ " a " +x )), newboard));
+                    //System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
+                    retval.add(new Successor((new String (i +" cambio de padre de " +board.father(i)+ " a " +x )), newboard));
                 }
             }
         }

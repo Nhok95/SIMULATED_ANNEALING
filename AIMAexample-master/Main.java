@@ -58,8 +58,8 @@ public class Main {
         
         board.calc_cercanos();
         
-        board.printdist();
-        board.printclose();
+        //board.printdist();
+        //board.printclose();
        
         //error en indice cuando accede a hijos
         board.init1();

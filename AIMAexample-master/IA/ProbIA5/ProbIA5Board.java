@@ -382,14 +382,14 @@ public class ProbIA5Board {
         Integer v_util = new Integer(0),vtotal= new Integer(0);
         for (int i = 0; i< sol.size(); i++)
         {
-            System.out.println("preecost");
-            sol.get(0).print();
+            //System.out.println("preecost");
+            //sol.get(0).print();
             
             p=sol.get(i).volumeandcostp();
             
-            System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
+            /*System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
             sol.get(0).print();
-            System.out.println("*********************************");
+            System.out.println("*********************************");*/
             
             vtotal=vtotal+p.getVol();
             cost=cost+p.getCost();
@@ -426,10 +426,13 @@ public class ProbIA5Board {
         return a;
     }
     
-    public Integer father(Integer x){
+    public Integer father(Integer fill){
+        //System.out.println("--------------FATHER-GOD----------: " + fill);
         Integer a=null;
         for(Tree t:sol){
-             a=t.father(x);
+            //System.out.println("bucle for-> soy "+t.getId());
+             a=t.father(t,fill);
+             //System.out.println("fii father: "+ a);
              if(a!=null)break;
         }
         return a;
@@ -437,7 +440,7 @@ public class ProbIA5Board {
     
     public boolean change(Integer pare,Integer noupare, Integer fill){
         
-        System.out.println ("----------> change ("+fill+" -> "+ pare+" to "+fill+" -> "+ noupare+").");
+        //System.out.println ("----------> change ("+fill+" -> "+ pare+" to "+fill+" -> "+ noupare+").");
         if(fill.equals(noupare) || noupare.equals(pare)) {
             //System.out.println("SPARTAAAA!!!!!!!");
             return false;
