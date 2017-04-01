@@ -31,8 +31,8 @@ public class ProbIA5Board {
     static public Sensores sensores;
     private ArrayList<Tree> sol;
     //ArrayList  conex;
-    static  Integer numCentros=1;
-    static Integer numSensores=5;
+    static  Integer numCentros=4;
+    static Integer numSensores=100;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
@@ -123,32 +123,7 @@ public class ProbIA5Board {
                 }
             }
         }
-    /**public void preparedistances(){
-        //INSTANCIAMOS
-        distances= new ArrayList<ArrayList<Float>>(numCentros+numSensores);
-        for(int i=0;i<numCentros+numSensores;i++){
-            ArrayList a= new ArrayList(numCentros+numSensores);
-            for(int j=0;j<numCentros+numSensores;j++) a.add(0);
-            distances.add(a);
-        }
-        //CALCULAMOS
-        for(int i=0;i<numCentros+numSensores;i++){
-            for(int j=0;j<numCentros+numSensores;j++)
-                {
-                    (distances.get(i)).set(j, new Float(distance(i,j)));
-                    (distances.get(j)).set(i,new Float(distance(i,j)));
-                }
-        }
-        
-        //Comprobamos
-        for(int i=0;i<numCentros+numSensores;i++){
-            for(int j=0;j<numCentros+numSensores;j++)
-                {
-                    System.out.println ("distancia de "+i+" a "+j+" : "+ distances.get(i).get(j));
-                }
-        }
-    }
-    **/
+
     public ArrayList<Integer> get30perc(int node){
         //WARNING ALGORITMO POCO EFICIENTE
         Integer size= new Integer(50*(numCentros+numSensores)/100);
@@ -404,8 +379,8 @@ public class ProbIA5Board {
     
     public double heuristic2(Integer v_util, Float cost) { //coste
         Float k = new Float(3); // constante experimental
-        System.out.println(k * pow(v_util,3)+"/"+cost);
-        Double h2 =  k* pow(v_util,3)/  cost;
+        System.out.println("heuristic value:" +cost+"/"+k * pow(v_util,3));
+        Double h2 = cost /(k* pow(v_util,3) ) ;
         return h2;
     }
    
