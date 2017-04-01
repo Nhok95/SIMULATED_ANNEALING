@@ -24,7 +24,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
             //sensor, els mes propers
                             //System.out.println("bucle2 "+ board.get30perc(i).size());
             ArrayList<Integer> viables =board.get30perc(i);
-            for (int l = 0; l < viables.size(); l++) System.out.println("viable "+l+" de "+i+" :"+viables.get(l));
+            //for (int l = 0; l < viables.size(); l++) System.out.println("viable "+l+" de "+i+" :"+viables.get(l));
             
             //provem a crear una solucio per cadascun dels intercanvis
             for (Integer x: viables) {
@@ -37,7 +37,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 System.out.println("SUCCESSOR FUNCTION: (x): "+x+"; (i): "+i);
                 if(newboard.change(board.father(i), x, i)) {
                     //System.out.println("i:" + i);
-                    //System.out.println("expansion");
+                    System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
                     retval.add(new Successor((new String (i +"cambio de padre de" +board.father(i)+ " a " +x )), newboard));
                 }
             }

@@ -299,7 +299,7 @@ public class ProbIA5Board {
                   //  System.out.println("dde busco"+ j);
                 }
                 
-                Tree t = sol.get(j).find(n);
+                Tree t = sol.get(j).find(n,null);
                 //System.out.println("b = "+ m);
                 if (t!=null){
                     t.add(new Tree(i));
@@ -382,7 +382,11 @@ public class ProbIA5Board {
         Integer v_util = new Integer(0),vtotal= new Integer(0);
         for (int i = 0; i< sol.size(); i++)
         {
+            System.out.println("preecost");
+            sol.get(0).print();
+            
             p=sol.get(i).volumeandcostp();
+            
             System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
             sol.get(0).print();
             System.out.println("*********************************");
@@ -435,55 +439,64 @@ public class ProbIA5Board {
         
         System.out.println ("----------> change ("+fill+" -> "+ pare+" to "+fill+" -> "+ noupare+").");
         if(fill.equals(noupare) || noupare.equals(pare)) {
-            System.out.println("SPARTAAAA!!!!!!!");
+            //System.out.println("SPARTAAAA!!!!!!!");
             return false;
         }
         
-        System.out.println ("------> print antes1");
+        /*System.out.println ("------> print antes1");
         sol.get(0).print();
         System.out.println ("------> print antes2");
         
         System.out.println ("noupare: "+noupare);
-        System.out.println ("pare: "+ pare);
+        System.out.println ("pare: "+ pare);*/
         Tree father= null;
         Tree newfather = null;
         int i =0;
-        System.out.println ( "noupare " +noupare + " fill " + fill);
-        while(newfather==null){
-            System.out.println ("chivato1");
-            System.out.println("i: "+i);
-            newfather=sol.get(i).find(noupare);
-            System.out.println("newfather: "+ newfather.getId());
-            
+        //System.out.println ( "noupare " +noupare + " fill " + fill);
+        while(newfather==null && i <sol.size()){
+            //System.out.println ("chivato1");
+            //System.out.println("i: "+i);
+            newfather=sol.get(i).find(noupare, fill);
             i++;
         }
-        i=0;
-        if(fill==noupare || fill == pare) System.out.println("ERROR FILL == PARES");
-        if((noupare >= numCentros && newfather.children().equals(2)) ||
-                (noupare < numCentros && newfather.children().equals(25))){
-            System.out.println("DOBLEEEEE IFFFFFFFFF");
+        if (newfather != null) {
+            //System.out.println("newfather: "+ newfather.getId());
+            i=0;
+            if(fill==noupare || fill == pare) System.out.println("ERROR FILL == PARES");
+            if((noupare >= numCentros && newfather.children().equals(2)) ||
+                    (noupare < numCentros && newfather.children().equals(25))){
+                //System.out.println("DOBLEEEEE IFFFFFFFFF");
+                return false;
+            }
+            //System.out.println("GOD FATHER: " + father);
+            while(newfather != null && father==null){
+                //System.out.println ("chivato2");
+                //System.out.println ("i " + i + " pare " +pare);
+                /*if (i ==2) {
+                    System.out.println("***********");
+                    sol.get(2).print();
+                }*/
+                father=sol.get(i).find(pare, fill);
+
+                i++;
+            }
+        
+            //if (father.getId() == fill || newfather.getId() == fill) System.out.println("ERROR!!!!!!!!!!");
+            //System.out.println("GOD FATHER2: " + father.getId());
+            newfather.add(father.quickfind(fill));//ho trobara a al primera iteracio 
+            //aixi que es prou eficient
+            father.remove(fill);//aixo tambe es directe
+            /*System.out.println ("------> print despues true");
+            sol.get(0).print();
+            System.out.println ("------> print despues true2");*/
+            return true;
+        }
+        else {
+            /*System.out.println ("------> print despues false");
+            sol.get(0).print();
+            System.out.println ("------> print despues false2");*/
             return false;
         }
-        System.out.println("GOD FATHER: " + father);
-        while(father==null){
-            System.out.println ("chivato2");
-            System.out.println ("i " + i + " pare " +pare);
-            /*if (i ==2) {
-                System.out.println("***********");
-                sol.get(2).print();
-            }*/
-            father=sol.get(i).find(pare);
-            i++;
-        }
-        //if (father.getId() == fill || newfather.getId() == fill) System.out.println("ERROR!!!!!!!!!!");
-        
-        newfather.add(father.quickfind(fill));//ho trobara a al primera iteracio 
-        //aixi que es prou eficient
-        father.remove(fill);//aixo tambe es directe
-        System.out.println ("------> print despues1");
-        sol.get(0).print();
-        System.out.println ("------> print despues2");
-       return true;
     }
      
 
