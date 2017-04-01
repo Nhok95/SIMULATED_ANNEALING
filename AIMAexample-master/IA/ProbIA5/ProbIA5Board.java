@@ -77,8 +77,8 @@ public class ProbIA5Board {
                     else System.out.println ("closest de s"+(i-numCentros)+": "+ closest.get(i).get(j));
             }
             System.out.println();
-        }*/
-        
+        }
+        */
         
     }
     
@@ -193,10 +193,10 @@ public class ProbIA5Board {
            capacidades.add(sensores.get(i-numCentros).getCapacidad());
        }
        
-       for (int j= 0; j < numCentros+numSensores; j++)
+       /*for (int j= 0; j < numCentros+numSensores; j++)
        {
-          // System.out.println("cap("+j+"): " +capacidades.get(j));
-       }
+           System.out.println("cap("+j+"): " +capacidades.get(j));
+       }*/
        
     }
      // Some functions will be needed for creating a copy of the state
@@ -374,7 +374,7 @@ public class ProbIA5Board {
         // compute the number of coins out of place respect to solution
         double sum =0;
         
-        //System.out.println("------heuristic-------");
+        System.out.println("------heuristic-------");
         //falta implementar cada uno de los heuristicos, uno que funcione
         //con suma, otro con una división, y quizás uno que los mezcle
         Float cost = new Float(0);
@@ -387,14 +387,15 @@ public class ProbIA5Board {
             
             p=sol.get(i).volumeandcostp();
             
-            /*System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
+            System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
             sol.get(0).print();
-            System.out.println("*********************************");*/
+            System.out.println("*********************************");
             
             vtotal=vtotal+p.getVol();
             cost=cost+p.getCost();
         }
         sum = heuristic2(vtotal,cost); 
+        System.out.println("suma total:" +sum);
         //sum = heuristic3(vtotal,cost); 
         //sum = heuristic4(vtotal,cost); 
 
@@ -402,8 +403,9 @@ public class ProbIA5Board {
     }
     
     public double heuristic2(Integer v_util, Float cost) { //coste
-        Integer k = 3; // constante experimental
-        Double h2 = cost/k * pow(v_util,3);
+        Float k = new Float(3); // constante experimental
+        System.out.println(k * pow(v_util,3)+"/"+cost);
+        Double h2 =  k* pow(v_util,3)/  cost;
         return h2;
     }
    
@@ -550,7 +552,7 @@ public void calc_dist()
             }
         }
         //Comprobamos
-        /*for(int i=0;i<numCentros+numSensores;i++){
+        for(int i=0;i<numCentros+numSensores;i++){
             for(int j=0;j<numCentros+numSensores;j++)
                 {
                     if (i <n_c && j < n_c) System.out.println ("distancia de c"+i+" a c"+j+" : "+ m_dist.get(i).get(j));
@@ -559,7 +561,7 @@ public void calc_dist()
                     else System.out.println ("distancia de s"+(i-n_c)+" a s"+(j-n_c)+" : "+ m_dist.get(i).get(j));
                 }
             System.out.println();
-        }*/
+        }
     }
     
     /**
