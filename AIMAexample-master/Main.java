@@ -30,6 +30,7 @@ public class Main {
     
     private static void printActions(List actions) {
         for (int i = 0; i < actions.size(); i++) {
+            System.out.println("printACTIONS i: "+i+ "; size: "+actions.size());
             String action = (String) actions.get(i);
             System.out.println(action);
         }
@@ -63,9 +64,9 @@ public class Main {
         //board.printclose();
        
         //error en indice cuando accede a hijos
-        //board.init1();
+        board.init1();
         //board.init2();
-        board.init3();
+        //board.init3();
         
         //board.squaringdist();
         //queda pendiente permitir usar SIM ANNEALING y HILL CLIMB Y ESCOGER
@@ -76,14 +77,15 @@ public class Main {
 
                 // Instantiate the search algorithm
 	// SHA DE CANVIAR LA BÚSQUEDA PER HEURISTIC HILL CL
-        Search alg = new SimulatedAnnealingSearch(4000,140,30,0.008);
+        //Search alg = new HillClimbingSearch();
+        Search alg = new SimulatedAnnealingSearch(1,1,1,0.008);
 
         // Instantiate the SearchAgent object
         SearchAgent agent = new SearchAgent(p, alg);
         
         	// We print the results of the search
         System.out.println();
-        printActions(agent.getActions());
+       // printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
         
 

@@ -13,3 +13,4 @@ public class ProbIA5HeuristicFunction implements HeuristicFunction {
         return ((ProbIA5Board) n).geth();
     }
 }
+//h:2.905045104347884E-4 fill

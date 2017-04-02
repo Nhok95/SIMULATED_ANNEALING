@@ -21,8 +21,8 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
 
         //provarem a "reenganxar" cada sensor a un altre
         //OPERADORES1
-        
-        /*for(int i=board.numCentros();i<board.numNodos();i++){
+        /*
+        for(int i=board.numCentros();i<board.numNodos();i++){
             //obtenem el 30 percent als que estem disposats a reenganxar aquest
             //sensor, els mes propers
                             //System.out.println("bucle2 "+ board.get30perc(i).size());
@@ -35,7 +35,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 
                 //System.out.println("bucle3");
                 //Instanciem
-                //newboard=board.copyestat();
+                newboard=board.copyestat();
                 //fem el canvi de pare corresponent, només si es pot
                 //System.out.println("SUCCESSOR FUNCTION: (MiFADER): "+board.father(i)+"; (x): "+x+"; (i): "+i);
                 if(newboard.change(board.father(i), x, i)) {
@@ -67,25 +67,30 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                
             }
         }*/
+        
+        
         //OPERADORES SA
                 //Instanciem
         //newboard=board.copyestat();
         //fem el canvi de pare corresponent, només si es pot
         Random rand = new Random();
-        int noupare = rand.nextInt(board.numCentros());
+        int noupare = rand.nextInt(board.numNodos());
         int fill = rand.nextInt(board.numNodos());
         while (fill < board.numCentros()) fill = rand.nextInt(board.numNodos());
-        
-        System.out.println("fill: "+ fill);
-        System.out.println("pare: "+ board.father(fill));
-        System.out.println("noupare: "+ noupare);
+        //System.out.println("----++++++++++++++++");
+        //System.out.println("fill: "+ fill);
+        //System.out.println("pare: "+ board.father(fill));
+        //System.out.println("noupare: "+ noupare);
         
         if(newboard.change(board.father(fill), noupare, fill)) {
-            System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
-            retval.add(new Successor((new String 
-               (fill +" cambio de padre de " +board.father(fill)+ " a " +noupare + " (h:" +newboard.heuristic()+")")
-                        ), newboard));
-                }
+            //System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
+            String s = new String(fill +" cambio de padre de " +board.father(fill)+ " a " +noupare + " (h:" +newboard.heuristic()+")");
+            System.out.println(s);
+            //newboard.printsol();
+            retval.add(new Successor(s, newboard));
+            //System.out.println("**************fin Expansion***************************");
+        }
+        
                
         return retval;
     }

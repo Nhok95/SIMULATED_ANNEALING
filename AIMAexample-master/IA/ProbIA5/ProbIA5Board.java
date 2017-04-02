@@ -296,7 +296,7 @@ public class ProbIA5Board {
             }
             hijos.set(n, hijos.get(n)+1);
         }
-        //printsol();
+        printsol();
     }
     
     //COlocamos sensores x orden en el centro hasta rellenarlo, el resto de nodos se enganchan a los otros sensores
@@ -471,7 +471,7 @@ public class ProbIA5Board {
         // compute the number of coins out of place respect to solution
         sumh =0;
         
-        System.out.println("------heuristic-------");
+        //System.out.println("------heuristic-------");
         //falta implementar cada uno de los heuristicos, uno que funcione
         //con suma, otro con una división, y quizás uno que los mezcle
         Float cost = new Float(0);
@@ -484,7 +484,7 @@ public class ProbIA5Board {
             
             p=sol.get(i).volumeandcostp();
             
-            System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
+            //System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
             //sol.get(0).print();
           
             
@@ -494,7 +494,7 @@ public class ProbIA5Board {
         sumh = heuristic2(vtotal,cost); 
         
         //sum = heuristic3(vtotal,cost); 
-        System.out.println("suma total:" +sumh);
+        //System.out.println("suma total:" +sumh);
         //System.out.println("*********************************");
         //printsol();
         //System.out.println("*********************************");
@@ -572,7 +572,7 @@ public class ProbIA5Board {
         //System.out.println ( "noupare " +noupare + " fill " + fill);
         while(newfather==null && i <sol.size()){
             //System.out.println ("chivato1");
-            //System.out.println("i: "+i);
+           // System.out.println("i: "+i);
             newfather=sol.get(i).find(noupare, fill);
             i++;
         }
@@ -582,6 +582,7 @@ public class ProbIA5Board {
             if(fill==noupare || fill == pare) System.out.println("ERROR FILL == PARES");
             if((noupare >= numCentros && newfather.children().equals(2)) ||
                     (noupare < numCentros && newfather.children().equals(25))){
+                //System.out.println("childrens: "+newfather.children());
                 //System.out.println("DOBLEEEEE IFFFFFFFFF");
                 return false;
             }
