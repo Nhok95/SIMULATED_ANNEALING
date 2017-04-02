@@ -136,6 +136,10 @@ public class ProbIA5Board {
         return closest30;
     }
     
+    public ArrayList<Integer> getclosest(int node){
+        return this.closest.get(node);
+    }
+    
 
     
     public int numNodos(){
@@ -344,7 +348,7 @@ public class ProbIA5Board {
             
             
         }
-        printsol();
+        //printsol();
     }
     
     

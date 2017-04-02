@@ -62,12 +62,12 @@ public class Main {
         //board.printclose();
        
         //error en indice cuando accede a hijos
-        //board.init1();
-        board.init2();
+        board.init1();
+        //board.init2();
         
         //board.squaringdist();
         //queda pendiente permitir usar SIM ANNEALING y HILL CLIMB Y ESCOGER
-        /*Problem p = new  Problem(board,
+        Problem p = new  Problem(board,
                                 new ProbIA5SuccesorFunction(),
                                 new ProbIA5GoalTest(),
                                 new ProbIA5HeuristicFunction());
@@ -83,7 +83,7 @@ public class Main {
         	// We print the results of the search
         System.out.println();
         printActions(agent.getActions());
-        printInstrumentation(agent.getInstrumentation());*/
+        printInstrumentation(agent.getInstrumentation());
 
         // You can access also to the goal state using the
 	// method getGoalState of class Search
