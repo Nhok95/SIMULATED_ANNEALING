@@ -10,6 +10,6 @@ public class ProbIA5HeuristicFunction implements HeuristicFunction {
 
     public double getHeuristicValue(Object n){
 
-        return ((ProbIA5Board) n).heuristic();
+        return ((ProbIA5Board) n).geth();
     }
 }

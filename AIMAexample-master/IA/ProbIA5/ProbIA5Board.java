@@ -31,12 +31,13 @@ public class ProbIA5Board {
     static public Sensores sensores;
     private ArrayList<Tree> sol;
     //ArrayList  conex;
-    static  Integer numCentros=1;
-    static Integer numSensores=200;
+    static  Integer numCentros = 4;
+    static Integer numSensores = 100;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
     //static public ArrayList<ArrayList<Float> > distances;
+    public double sumh = 50;
     static public ArrayList<ArrayList<Integer> > closest;
     static public ArrayList<ArrayList<Float> > m_dist; //0-3 -> centros || 4-103 -> sensores
     
@@ -160,9 +161,10 @@ public class ProbIA5Board {
  
     public ProbIA5Board(Integer ncenters,Integer nsensores){
         numCentros=ncenters;
+        numSensores=nsensores;
        // distances=new ArrayList<ArrayList<Float> >(ncenters+nsensores);
         this.centrosDatos= new CentrosDatos(ncenters,1234);
-        this.sensores= new Sensores(nsensores, 4321);
+        this.sensores= new Sensores(nsensores,4321);
        // this.conex=new ArrayList();
        //for(int i= 0; i<numCentros ;i++) this.sol.add(new Tree(0));
         this.capacidades= new ArrayList();
@@ -227,6 +229,15 @@ public class ProbIA5Board {
 	private int NearFreeS2(int i1, int ns, int nc, ArrayList<Boolean> used, ArrayList<Integer> hijos) {
 		for (int i= nc; i<nc+ns; ++i){
     		int i2 = distanciesOrdenades.get(i1).get(i).index;  // el for va de nc+1 (mas cercano) a nc+ns (mas lejano) comparando si estan libres
+                //System.out.println(i2+" used " + used.get(i2)+ " hijos " + hijos.get(i2));
+    		if (used.get(i2) == false && hijos.get(i2)<2) return i2; // used == true implica que solo se unira a un nodo que ya se haya tratado y este formando parte de un arbol
+		}
+		return -1;
+        }
+        private int NearFreeS3(int i1, int ns, int nc, ArrayList<Boolean> used, ArrayList<Integer> hijos) {
+		for (int i= nc; i<nc+ns; ++i){
+    		int i2 = distanciesOrdenades.get(i1).get(i).index;  // el for va de nc+1 (mas cercano) a nc+ns (mas lejano) comparando si estan libres
+                //System.out.println(i2+" used " + used.get(i2)+ " hijos " + hijos.get(i2));
     		if (used.get(i2) == true && hijos.get(i2)<2) return i2; // used == true implica que solo se unira a un nodo que ya se haya tratado y este formando parte de un arbol
 		}
 		return -1;
@@ -285,7 +296,7 @@ public class ProbIA5Board {
             }
             hijos.set(n, hijos.get(n)+1);
         }
-        printsol();
+        //printsol();
     }
     
     //COlocamos sensores x orden en el centro hasta rellenarlo, el resto de nodos se enganchan a los otros sensores
@@ -304,17 +315,20 @@ public class ProbIA5Board {
 
 
         //Añadimos 25 sensores a cada centro
-        
+        int var = ns;
         for (int k = 0; k < nc; k++)
         {
-            int tope = ns;
-            if (ns > 25) tope = 25; 
+            int tope = var;
+            if (tope > 25) tope = 25;
+            //System.out.println("tope: "+tope);
             for (int q = 0; q <tope; q++)
             {
                 sol.get(k).add(new Tree(i));
+                //System.out.println("ns: " +ns);
                 //System.out.println("añadiendo sensor "+(i-nc)+ " al centro "+ k);
                 i++;
             }
+            var -= 25;
         }
         while (i < nc+ns) 
         {
@@ -349,6 +363,46 @@ public class ProbIA5Board {
             
         }
         //printsol();
+    }
+    
+    public void init3(){ //roundrobin de centros para escoger su mas cercano + sensor mas cercano cuando se saturan
+
+	distanciesOrdenades = Ordenar(m_dist);
+        int nc = numCentros;
+    	int ns = numSensores;
+        sol = new ArrayList<Tree> (); 
+    	for (int i =0; i< nc; ++i) sol.add(new Tree(i));
+        for (int i = 0; i < nc+ns;++i) hijos.add(0);
+     	ArrayList<Boolean> used = new ArrayList<Boolean>();
+        for (int i = 0; i < nc;++i)used.add(true);
+        for (int i = 0; i < ns;++i)used.add(false);
+    	Boolean done = false;
+    	for(int i=0;i<25;++i){
+    		for (int j = 0; j < nc; ++j){
+    			int n = NearFreeS2(i,ns,nc,used,hijos);
+    			done = (n == -1); 
+    			if (done) break;
+    			used.set(n,true);
+    			sol.get(j).add(new Tree(n));
+    			hijos.set(j, hijos.get(j)+1);
+    		}
+    		if (done) break;
+    	}
+    	int i = used.indexOf(false);
+    	while ( i != -1 ){
+    		int n = NearFreeS3(i,ns, nc,used,hijos);
+                for (int j = 0; j < sol.size(); ++j){
+                    Tree t = sol.get(j).find(n,null);
+                    if (t!=null){
+                        t.add(new Tree(i));
+                        used.set(i, true);
+                    }
+                }
+                //System.out.println(n);
+                hijos.set(n, hijos.get(n)+1);
+                i = used.indexOf(false);
+    	}
+    	//printsol();
     }
     
     
@@ -415,7 +469,7 @@ public class ProbIA5Board {
  
     public double heuristic(){
         // compute the number of coins out of place respect to solution
-        double sum =0;
+        sumh =0;
         
         System.out.println("------heuristic-------");
         //falta implementar cada uno de los heuristicos, uno que funcione
@@ -431,24 +485,31 @@ public class ProbIA5Board {
             p=sol.get(i).volumeandcostp();
             
             System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
-            sol.get(0).print();
+            //sol.get(0).print();
           
             
             vtotal=vtotal+p.getVol();
             cost=cost+p.getCost();
         }
-        //sum = heuristic2(vtotal,cost); 
+        sumh = heuristic2(vtotal,cost); 
         
-        sum = heuristic3(vtotal,cost); 
-        System.out.println("suma total:" +sum);
-        System.out.println("*********************************");
+        //sum = heuristic3(vtotal,cost); 
+        System.out.println("suma total:" +sumh);
+        //System.out.println("*********************************");
+        //printsol();
+        //System.out.println("*********************************");
 
-        return sum;
+        return sumh;
+    }
+    
+    double geth()
+    {
+        return sumh;
     }
     
     public double heuristic2(Integer v_util, Float cost) { //coste
-        Float k = new Float(3); // constante experimental
-        System.out.println("\n heuristic value:" +cost+"/"+k * pow(v_util,3));
+        Float k = new Float(100); // constante experimental
+        //System.out.println("\n heuristic value: c->" +cost+"/ v->"+v_util);
         Double h2 = cost /(k* pow(v_util,3) ) ;
         return h2;
     }
@@ -456,9 +517,19 @@ public class ProbIA5Board {
    
     //
     public double heuristic3(Integer v_util, Float cost){
-        Integer k = 50; //constante experimental
+        Integer k = 100; //constante experimental
         double h4 = cost- k*pow(v_util,3) ;
         return h4;
+    }
+    
+    public double heuristic4(Integer v_util, Float cost){
+        int k = 100;
+         double h3= pow(maxvol(),3)-pow(v_util,3) + (cost/k);
+         return h3;
+    }
+    public int maxvol(){
+        int x=numCentros*25*15;
+        return x;
     }
     
     public ProbIA5Board copyestat(){
@@ -549,9 +620,9 @@ public class ProbIA5Board {
 public void calc_dist()
     {
         int n_c = centrosDatos.size();
-        System.out.println("n_c¨: " + n_c);
+        //System.out.println("n_c¨: " + n_c);
         int n = n_c + sensores.size();
-        System.out.println("n¨: " + n);
+        //System.out.println("n¨: " + n);
         m_dist= new ArrayList<ArrayList<Float>>(n);
         float x_var = 0.0f;
         float y_var = 0.0f;

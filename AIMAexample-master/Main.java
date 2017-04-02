@@ -9,6 +9,7 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
 
 //import aima.search.informed.AStarSearch;
 import java.util.Iterator;
@@ -50,7 +51,7 @@ public class Main {
         
         
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
-        ProbIA5Board board=new ProbIA5Board(2,200);
+        ProbIA5Board board=new ProbIA5Board(4,100);
         
         //calculo de distancias (las dos funcionan bien)
         //board.preparedistances(); 
@@ -62,8 +63,9 @@ public class Main {
         //board.printclose();
        
         //error en indice cuando accede a hijos
-        board.init1();
+        //board.init1();
         //board.init2();
+        board.init3();
         
         //board.squaringdist();
         //queda pendiente permitir usar SIM ANNEALING y HILL CLIMB Y ESCOGER
@@ -74,16 +76,16 @@ public class Main {
 
                 // Instantiate the search algorithm
 	// SHA DE CANVIAR LA BÚSQUEDA PER HEURISTIC HILL CL
-        Search alg = new HillClimbingSearch();
+        Search alg = new SimulatedAnnealingSearch(4000,140,30,0.008);
 
         // Instantiate the SearchAgent object
         SearchAgent agent = new SearchAgent(p, alg);
-        
         
         	// We print the results of the search
         System.out.println();
         printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
+        
 
         // You can access also to the goal state using the
 	// method getGoalState of class Search
