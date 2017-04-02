@@ -19,7 +19,7 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 //System.out.println("bucle1");
 
         //provarem a "reenganxar" cada sensor a un altre
-        for(int i=board.numCentros();i<board.numNodos();i++){
+        /*for(int i=board.numCentros();i<board.numNodos();i++){
             //obtenem el 30 percent als que estem disposats a reenganxar aquest
             //sensor, els mes propers
                             //System.out.println("bucle2 "+ board.get30perc(i).size());
@@ -34,13 +34,25 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 //Instanciem
                 newboard=board.copyestat();
                 //fem el canvi de pare corresponent, només si es pot
-                //System.out.println("SUCCESSOR FUNCTION: (MiFADER): "+board.father(i)+"; (x): "+x+"; (i): "+i);
+                System.out.println("SUCCESSOR FUNCTION: (MiFADER): "+board.father(i)+"; (x): "+x+"; (i): "+i);
                 if(newboard.change(board.father(i), x, i)) {
                     //System.out.println("i:" + i);
-                    //System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
+                    System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
                     retval.add(new Successor((new String (i +" cambio de padre de " +board.father(i)+ " a " +x )), newboard));
                 }
+               
             }
+        }*/
+        
+        //OPERADORES2
+        System.out.println("operadores2");
+        for (int i= board.numCentros(); i < board.numNodos(); i++){
+            
+                if(true) {
+                    //System.out.println("i:" + i);
+                    
+                    retval.add(new Successor((new String ("aresta ")), newboard));
+                }
         }
         return retval;
     }

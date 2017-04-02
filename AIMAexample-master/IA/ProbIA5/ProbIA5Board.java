@@ -31,8 +31,8 @@ public class ProbIA5Board {
     static public Sensores sensores;
     private ArrayList<Tree> sol;
     //ArrayList  conex;
-    static  Integer numCentros=4;
-    static Integer numSensores=100;
+    static  Integer numCentros=1;
+    static Integer numSensores=200;
     //CODIFICACION : si el Integer a >= numcentros es un sensor.
     //se busca en sensores a-numcentros 
     //else se busca en centros
@@ -262,9 +262,6 @@ public class ProbIA5Board {
     			saturados = (n == -1);
     		}
             if (saturados) n = NearFreeS(i,ns,nc,hijos); //solo debe buscar sensores por debajo de i
-            //Guillem : esto solo funcionará si no estan saturados los centros creo,
-            // en caso contrario se deberá buscar con la funcion(Tree.find(Integer a)) 
-            //que devuelve el árbol con Id a, y si no lo encuentra su id es -1
             //System.out.println(i+ " es hijo de: "+n);
             if(!saturados) sol.get(n).add(new Tree(i));
             else for (int j = 0; j< sol.size();++j){
@@ -286,13 +283,80 @@ public class ProbIA5Board {
         }
         printsol();
     }
+    
+    //COlocamos sensores x orden en el centro hasta rellenarlo, el resto de nodos se enganchan a los otros sensores
+    public void init2(){
+        
+    	int nc = numCentros;
+    	int ns = numSensores;
+        
+        /*System.out.println ("CAPACIDADES:");
+        for (int x = 0; x <nc+ns; x++)
+            System.out.println("cap"+x+": "+capacidades.get(x));*/
+        
+        sol = new ArrayList<Tree> (); //creamos un array 
+        int i = 0;
+    	for (; i< nc; ++i) sol.add(new Tree(i)); //añadimos los centros
+
+
+        //Añadimos 25 sensores a cada centro
+        
+        for (int k = 0; k < nc; k++)
+        {
+            int tope = ns;
+            if (ns > 25) tope = 25; 
+            for (int q = 0; q <tope; q++)
+            {
+                sol.get(k).add(new Tree(i));
+                //System.out.println("añadiendo sensor "+(i-nc)+ " al centro "+ k);
+                i++;
+            }
+        }
+        while (i < nc+ns) 
+        {
+            //System.out.println("This isn't even my final form");
+           
+            for (int j = 0; j <nc ;j++){  //centros
+                boolean b = false;
+                boolean centro = true;
+                
+                //System.out.println("j: "+j);
+                //System.out.println("nc+ns: "+(nc+ns));
+                Tree search = sol.get(0);
+                for (int l = 0; l < sol.get(j).children() && !b; l++){ //hijos
+                    //System.out.println("--i: "+i+ "; search: "+search.getId());
+                    b = (sol.get(j).putSensor(search,i,centro));
+                    if (b){
+                        //System.out.println("--i: "+i+ "; b:"+b);
+                        i++;
+                        search = sol.get(j);
+                        //System.out.println("--next i: "+i);
+                    }
+                    else {
+                        //System.out.println("ELSEEEEEEEEEEEEEEEEEEEEEEEE");
+                        search = sol.get(j).child(l);
+                        centro = true;
+                    }
+                }
+                //if (!b) System.out.println("****************************ESTOO SE VA A DESCONTROLAAAAAAR!!!!!");
+                //printsol();
+            }
+            
+            
+        }
+        printsol();
+    }
+    
+    
+    
     public void printsol(){
         for(Tree t :sol)t.print();
     }
+   
     
 
 
-	public Map<Integer,Integer> Init2(int nc, int ns){
+	/*public Map<Integer,Integer> Init2(int nc, int ns){
 
 		distanciesOrdenades = Ordenar(m_dist);
 
@@ -319,7 +383,7 @@ public class ProbIA5Board {
     		i = used.indexOf(false);
     	}
     	return firstSol;
-    }
+    }*/
 
     
     public void setSol(ArrayList<Tree  > a){
@@ -364,36 +428,34 @@ public class ProbIA5Board {
             
             System.out.println("----------------> arbol "+i+ ": *volumen: " +p.getVol()+", *coste: "+ p.getCost());
             sol.get(0).print();
-            System.out.println("*********************************");
+          
             
             vtotal=vtotal+p.getVol();
             cost=cost+p.getCost();
         }
-        sum = heuristic2(vtotal,cost); 
+        //sum = heuristic2(vtotal,cost); 
+        
+        sum = heuristic3(vtotal,cost); 
         System.out.println("suma total:" +sum);
-        //sum = heuristic3(vtotal,cost); 
-        //sum = heuristic4(vtotal,cost); 
+        System.out.println("*********************************");
 
         return sum;
     }
     
     public double heuristic2(Integer v_util, Float cost) { //coste
         Float k = new Float(3); // constante experimental
-        System.out.println("heuristic value:" +cost+"/"+k * pow(v_util,3));
+        System.out.println("\n heuristic value:" +cost+"/"+k * pow(v_util,3));
         Double h2 = cost /(k* pow(v_util,3) ) ;
         return h2;
     }
    
    
     //
-    public double heuristic4(Integer v_util, Float cost){
-        Integer k = 3; //constante experimental
-        double h4 = k*v_util - cost;
+    public double heuristic3(Integer v_util, Float cost){
+        Integer k = 50; //constante experimental
+        double h4 = cost- k*pow(v_util,3) ;
         return h4;
     }
-    //
-    
-    //
     
     public ProbIA5Board copyestat(){
         ProbIA5Board a = new ProbIA5Board(numCentros,sensores.size());
@@ -527,7 +589,7 @@ public void calc_dist()
             }
         }
         //Comprobamos
-        for(int i=0;i<numCentros+numSensores;i++){
+        /*for(int i=0;i<numCentros+numSensores;i++){
             for(int j=0;j<numCentros+numSensores;j++)
                 {
                     if (i <n_c && j < n_c) System.out.println ("distancia de c"+i+" a c"+j+" : "+ m_dist.get(i).get(j));
@@ -536,7 +598,7 @@ public void calc_dist()
                     else System.out.println ("distancia de s"+(i-n_c)+" a s"+(j-n_c)+" : "+ m_dist.get(i).get(j));
                 }
             System.out.println();
-        }
+        }*/
     }
     
     /**
@@ -640,3 +702,410 @@ public void printdist(){
         }
     }
 }
+
+//PRINT de INIT2 para: 2 centros/200 sensores
+    /*
+Nodo 0(size: 25)  hijos:
+2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 
+Nodo 2(size: 2)  hijos:
+52 53 
+Nodo 52(size: 2)  hijos:
+102 104 
+Nodo 102(size: 0)  hijos:
+
+Nodo 104(size: 0)  hijos:
+
+Nodo 53(size: 2)  hijos:
+106 108 
+Nodo 106(size: 0)  hijos:
+
+Nodo 108(size: 0)  hijos:
+
+Nodo 3(size: 2)  hijos:
+54 55 
+Nodo 54(size: 2)  hijos:
+110 112 
+Nodo 110(size: 0)  hijos:
+
+Nodo 112(size: 0)  hijos:
+
+Nodo 55(size: 2)  hijos:
+114 116 
+Nodo 114(size: 0)  hijos:
+
+Nodo 116(size: 0)  hijos:
+
+Nodo 4(size: 2)  hijos:
+56 57 
+Nodo 56(size: 2)  hijos:
+118 120 
+Nodo 118(size: 0)  hijos:
+
+Nodo 120(size: 0)  hijos:
+
+Nodo 57(size: 2)  hijos:
+122 124 
+Nodo 122(size: 0)  hijos:
+
+Nodo 124(size: 0)  hijos:
+
+Nodo 5(size: 2)  hijos:
+58 59 
+Nodo 58(size: 2)  hijos:
+126 128 
+Nodo 126(size: 0)  hijos:
+
+Nodo 128(size: 0)  hijos:
+
+Nodo 59(size: 2)  hijos:
+130 132 
+Nodo 130(size: 0)  hijos:
+
+Nodo 132(size: 0)  hijos:
+
+Nodo 6(size: 2)  hijos:
+60 61 
+Nodo 60(size: 2)  hijos:
+134 136 
+Nodo 134(size: 0)  hijos:
+
+Nodo 136(size: 0)  hijos:
+
+Nodo 61(size: 2)  hijos:
+138 140 
+Nodo 138(size: 0)  hijos:
+
+Nodo 140(size: 0)  hijos:
+
+Nodo 7(size: 2)  hijos:
+62 63 
+Nodo 62(size: 2)  hijos:
+142 144 
+Nodo 142(size: 0)  hijos:
+
+Nodo 144(size: 0)  hijos:
+
+Nodo 63(size: 2)  hijos:
+146 148 
+Nodo 146(size: 0)  hijos:
+
+Nodo 148(size: 0)  hijos:
+
+Nodo 8(size: 2)  hijos:
+64 65 
+Nodo 64(size: 2)  hijos:
+150 152 
+Nodo 150(size: 0)  hijos:
+
+Nodo 152(size: 0)  hijos:
+
+Nodo 65(size: 2)  hijos:
+154 156 
+Nodo 154(size: 0)  hijos:
+
+Nodo 156(size: 0)  hijos:
+
+Nodo 9(size: 2)  hijos:
+66 67 
+Nodo 66(size: 2)  hijos:
+158 160 
+Nodo 158(size: 0)  hijos:
+
+Nodo 160(size: 0)  hijos:
+
+Nodo 67(size: 2)  hijos:
+162 164 
+Nodo 162(size: 0)  hijos:
+
+Nodo 164(size: 0)  hijos:
+
+Nodo 10(size: 2)  hijos:
+68 69 
+Nodo 68(size: 2)  hijos:
+166 168 
+Nodo 166(size: 0)  hijos:
+
+Nodo 168(size: 0)  hijos:
+
+Nodo 69(size: 2)  hijos:
+170 172 
+Nodo 170(size: 0)  hijos:
+
+Nodo 172(size: 0)  hijos:
+
+Nodo 11(size: 2)  hijos:
+70 71 
+Nodo 70(size: 2)  hijos:
+174 176 
+Nodo 174(size: 0)  hijos:
+
+Nodo 176(size: 0)  hijos:
+
+Nodo 71(size: 2)  hijos:
+178 180 
+Nodo 178(size: 0)  hijos:
+
+Nodo 180(size: 0)  hijos:
+
+Nodo 12(size: 2)  hijos:
+72 73 
+Nodo 72(size: 2)  hijos:
+182 184 
+Nodo 182(size: 0)  hijos:
+
+Nodo 184(size: 0)  hijos:
+
+Nodo 73(size: 2)  hijos:
+186 188 
+Nodo 186(size: 0)  hijos:
+
+Nodo 188(size: 0)  hijos:
+
+Nodo 13(size: 2)  hijos:
+74 75 
+Nodo 74(size: 2)  hijos:
+190 192 
+Nodo 190(size: 0)  hijos:
+
+Nodo 192(size: 0)  hijos:
+
+Nodo 75(size: 2)  hijos:
+194 196 
+Nodo 194(size: 0)  hijos:
+
+Nodo 196(size: 0)  hijos:
+
+Nodo 14(size: 2)  hijos:
+76 77 
+Nodo 76(size: 2)  hijos:
+198 200 
+Nodo 198(size: 0)  hijos:
+
+Nodo 200(size: 0)  hijos:
+
+Nodo 77(size: 0)  hijos:
+
+Nodo 15(size: 2)  hijos:
+78 79 
+Nodo 78(size: 0)  hijos:
+
+Nodo 79(size: 0)  hijos:
+
+Nodo 16(size: 2)  hijos:
+80 81 
+Nodo 80(size: 0)  hijos:
+
+Nodo 81(size: 0)  hijos:
+
+Nodo 17(size: 2)  hijos:
+82 83 
+Nodo 82(size: 0)  hijos:
+
+Nodo 83(size: 0)  hijos:
+
+Nodo 18(size: 2)  hijos:
+84 85 
+Nodo 84(size: 0)  hijos:
+
+Nodo 85(size: 0)  hijos:
+
+Nodo 19(size: 2)  hijos:
+86 87 
+Nodo 86(size: 0)  hijos:
+
+Nodo 87(size: 0)  hijos:
+
+Nodo 20(size: 2)  hijos:
+88 89 
+Nodo 88(size: 0)  hijos:
+
+Nodo 89(size: 0)  hijos:
+
+Nodo 21(size: 2)  hijos:
+90 91 
+Nodo 90(size: 0)  hijos:
+
+Nodo 91(size: 0)  hijos:
+
+Nodo 22(size: 2)  hijos:
+92 93 
+Nodo 92(size: 0)  hijos:
+
+Nodo 93(size: 0)  hijos:
+
+Nodo 23(size: 2)  hijos:
+94 95 
+Nodo 94(size: 0)  hijos:
+
+Nodo 95(size: 0)  hijos:
+
+Nodo 24(size: 2)  hijos:
+96 97 
+Nodo 96(size: 0)  hijos:
+
+Nodo 97(size: 0)  hijos:
+
+Nodo 25(size: 2)  hijos:
+98 99 
+Nodo 98(size: 0)  hijos:
+
+Nodo 99(size: 0)  hijos:
+
+Nodo 26(size: 2)  hijos:
+100 101 
+Nodo 100(size: 0)  hijos:
+
+Nodo 101(size: 0)  hijos:
+
+Nodo 1(size: 25)  hijos:
+27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 
+Nodo 27(size: 2)  hijos:
+103 105 
+Nodo 103(size: 2)  hijos:
+107 109 
+Nodo 107(size: 0)  hijos:
+
+Nodo 109(size: 0)  hijos:
+
+Nodo 105(size: 2)  hijos:
+111 113 
+Nodo 111(size: 0)  hijos:
+
+Nodo 113(size: 0)  hijos:
+
+Nodo 28(size: 2)  hijos:
+115 117 
+Nodo 115(size: 2)  hijos:
+119 121 
+Nodo 119(size: 0)  hijos:
+
+Nodo 121(size: 0)  hijos:
+
+Nodo 117(size: 2)  hijos:
+123 125 
+Nodo 123(size: 0)  hijos:
+
+Nodo 125(size: 0)  hijos:
+
+Nodo 29(size: 2)  hijos:
+127 129 
+Nodo 127(size: 2)  hijos:
+131 133 
+Nodo 131(size: 0)  hijos:
+
+Nodo 133(size: 0)  hijos:
+
+Nodo 129(size: 2)  hijos:
+135 137 
+Nodo 135(size: 0)  hijos:
+
+Nodo 137(size: 0)  hijos:
+
+Nodo 30(size: 2)  hijos:
+139 141 
+Nodo 139(size: 2)  hijos:
+143 145 
+Nodo 143(size: 0)  hijos:
+
+Nodo 145(size: 0)  hijos:
+
+Nodo 141(size: 2)  hijos:
+147 149 
+Nodo 147(size: 0)  hijos:
+
+Nodo 149(size: 0)  hijos:
+
+Nodo 31(size: 2)  hijos:
+151 153 
+Nodo 151(size: 2)  hijos:
+155 157 
+Nodo 155(size: 0)  hijos:
+
+Nodo 157(size: 0)  hijos:
+
+Nodo 153(size: 2)  hijos:
+159 161 
+Nodo 159(size: 0)  hijos:
+
+Nodo 161(size: 0)  hijos:
+
+Nodo 32(size: 2)  hijos:
+163 165 
+Nodo 163(size: 2)  hijos:
+167 169 
+Nodo 167(size: 0)  hijos:
+
+Nodo 169(size: 0)  hijos:
+
+Nodo 165(size: 2)  hijos:
+171 173 
+Nodo 171(size: 0)  hijos:
+
+Nodo 173(size: 0)  hijos:
+
+Nodo 33(size: 2)  hijos:
+175 177 
+Nodo 175(size: 2)  hijos:
+179 181 
+Nodo 179(size: 0)  hijos:
+
+Nodo 181(size: 0)  hijos:
+
+Nodo 177(size: 2)  hijos:
+183 185 
+Nodo 183(size: 0)  hijos:
+
+Nodo 185(size: 0)  hijos:
+
+Nodo 34(size: 2)  hijos:
+187 189 
+Nodo 187(size: 2)  hijos:
+191 193 
+Nodo 191(size: 0)  hijos:
+
+Nodo 193(size: 0)  hijos:
+
+Nodo 189(size: 2)  hijos:
+195 197 
+Nodo 195(size: 0)  hijos:
+
+Nodo 197(size: 0)  hijos:
+
+Nodo 35(size: 2)  hijos:
+199 201 
+Nodo 199(size: 0)  hijos:
+
+Nodo 201(size: 0)  hijos:
+
+Nodo 36(size: 0)  hijos:
+
+Nodo 37(size: 0)  hijos:
+
+Nodo 38(size: 0)  hijos:
+
+Nodo 39(size: 0)  hijos:
+
+Nodo 40(size: 0)  hijos:
+
+Nodo 41(size: 0)  hijos:
+
+Nodo 42(size: 0)  hijos:
+
+Nodo 43(size: 0)  hijos:
+
+Nodo 44(size: 0)  hijos:
+
+Nodo 45(size: 0)  hijos:
+
+Nodo 46(size: 0)  hijos:
+
+Nodo 47(size: 0)  hijos:
+
+Nodo 48(size: 0)  hijos:
+
+Nodo 49(size: 0)  hijos:
+
+Nodo 50(size: 0)  hijos:
+
+Nodo 51(size: 0)  hijos:
+*/

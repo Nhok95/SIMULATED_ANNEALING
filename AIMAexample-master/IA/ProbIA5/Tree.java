@@ -59,8 +59,8 @@ public class Tree {
     public void print(){
             System.out.println ();
             System.out.println ("Nodo "+ this.root +"(size: " + children.size()+ ")  hijos:");
-            for(Tree t : children)         System.out.print (t.root+ " ");
-             for (Tree t:children) t.print();
+            for(Tree t : children) System.out.print (t.root+ " ");
+            for(Tree t :children) t.print();
             
     }
     
@@ -254,5 +254,44 @@ public class Tree {
         //System.out.println("cost("+this.root +"): " + p.getCost());
         return p;
     }
- 
+    
+    Boolean putSensor(Tree loc, Integer nouSensor, boolean centro) {
+        //System.out.println("Estoy en: "+loc.getId()+ "; centro= "+ centro);
+        Boolean b = new Boolean(false);
+        if (loc != null){
+            //System.out.println("++++NO null++++");
+            for (int k = 0; k < loc.children.size() && loc.children.size() >0 ; k++){
+                //System.out.println("FILLO("+k+"): "+ loc.children.get(k).getId());
+            }
+            if (loc.children.isEmpty()) 
+            {
+                //System.out.println("LO PUTEO ");
+                loc.add(new Tree(nouSensor));
+                b = true;
+            }
+            else if (loc.children.size() == 1)
+            {
+                //System.out.println("Ya hay un hijo ");
+                loc.add(new Tree(nouSensor));
+                b = true;
+            }
+            else if (loc.children.size() == 2 && !centro) {
+                //System.out.println("HIJITOS DE DIOS");
+                b = false;
+            }
+            
+            else { 
+                for (int i = 0; i < loc.children() && !b ; i++){
+                //System.out.println("i :" + i);
+                b = putSensor(loc.children.get(i), nouSensor, false);
+                //System.out.println("else "+ b);
+                }
+            }
+            
+          
+        }
+        //System.out.println("soy "+ b);
+        return b;
+    } 
+    
 }
