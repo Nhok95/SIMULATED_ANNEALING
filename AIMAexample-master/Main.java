@@ -30,25 +30,16 @@ public class Main {
     
     private static void printActions(List actions) {
         for (int i = 0; i < actions.size(); i++) {
-            System.out.println("printACTIONS i: "+i+ "; size: "+actions.size());
+            //System.out.println("printACTIONS i: "+i+ "; size: "+actions.size());
             String action = (String) actions.get(i);
             System.out.println(action);
         }
     }
 
     public static void main(String[] args) throws Exception{
+        long ini,fi;
         //CentrosDatos centrosDatos= new CentrosDatos(2,1234);
         //Sensores sensores= new Sensores(50, 4321);
-        
-        /*for (int i = 0; i < 1; i++)
-        {
-            System.out.println("c"+i+": x-> "+centrosDatos.get(i).getCoordX()+"; y->"+centrosDatos.get(i).getCoordY());
-        }
-        System.out.println();
-        for (int i = 0; i < 4; i++)
-        {
-            System.out.println("s"+i+": x-> "+sensores.get(i).getCoordX()+"; y->"+sensores.get(i).getCoordY());
-        }*/
         
         
          //la propia creadora te genera 4 centros y 100 sensores con seed 1234 
@@ -60,10 +51,7 @@ public class Main {
         
         board.calc_cercanos();
         
-        //board.printdist();
-        //board.printclose();
        
-        //error en indice cuando accede a hijos
         board.init1();
         //board.init2();
         //board.init3();
@@ -77,17 +65,22 @@ public class Main {
 
                 // Instantiate the search algorithm
 	// SHA DE CANVIAR LA BÚSQUEDA PER HEURISTIC HILL CL
+        
+        ini = System.currentTimeMillis();
         //Search alg = new HillClimbingSearch();
-        Search alg = new SimulatedAnnealingSearch(1,1,1,0.008);
-
+        Search alg = new SimulatedAnnealingSearch(3000,30,35,0.064);
+        
         // Instantiate the SearchAgent object
         SearchAgent agent = new SearchAgent(p, alg);
+        fi = System.currentTimeMillis();
         
         	// We print the results of the search
         System.out.println();
-       // printActions(agent.getActions());
+        //printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());
         
+        long temps = (fi-ini);
+        System.out.println("temps: "+temps+ "ms");
 
         // You can access also to the goal state using the
 	// method getGoalState of class Search

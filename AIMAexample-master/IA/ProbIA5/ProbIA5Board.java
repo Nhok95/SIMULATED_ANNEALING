@@ -38,6 +38,8 @@ public class ProbIA5Board {
     //else se busca en centros
     //static public ArrayList<ArrayList<Float> > distances;
     public double sumh = 50;
+    Float cost;
+    Integer vtotal;
     static public ArrayList<ArrayList<Integer> > closest;
     static public ArrayList<ArrayList<Float> > m_dist; //0-3 -> centros || 4-103 -> sensores
     
@@ -296,7 +298,7 @@ public class ProbIA5Board {
             }
             hijos.set(n, hijos.get(n)+1);
         }
-        printsol();
+        //printsol();
     }
     
     //COlocamos sensores x orden en el centro hasta rellenarlo, el resto de nodos se enganchan a los otros sensores
@@ -362,7 +364,7 @@ public class ProbIA5Board {
             
             
         }
-        //printsol();
+        printsol();
     }
     
     public void init3(){ //roundrobin de centros para escoger su mas cercano + sensor mas cercano cuando se saturan
@@ -474,9 +476,10 @@ public class ProbIA5Board {
         //System.out.println("------heuristic-------");
         //falta implementar cada uno de los heuristicos, uno que funcione
         //con suma, otro con una división, y quizás uno que los mezcle
-        Float cost = new Float(0);
+        cost = new Float(0);
         Pair p= new Pair();
-        Integer v_util = new Integer(0),vtotal= new Integer(0);
+        Integer v_util = new Integer(0);
+        vtotal= new Integer(0);
         for (int i = 0; i< sol.size(); i++)
         {
             //System.out.println("preecost");
@@ -491,7 +494,9 @@ public class ProbIA5Board {
             vtotal=vtotal+p.getVol();
             cost=cost+p.getCost();
         }
+        
         sumh = heuristic2(vtotal,cost); 
+        
         
         //sum = heuristic3(vtotal,cost); 
         //System.out.println("suma total:" +sumh);
@@ -501,10 +506,22 @@ public class ProbIA5Board {
 
         return sumh;
     }
+    public int num_c_u(){
+        int res = 0;
+        for (int i = 0; i < sol.size(); i++){
+            if (sol.get(i).children() >0) res++;
+        }
+        return res;
+    }
     
-    double geth()
-    {
+    double geth(){
         return sumh;
+    }
+    int getvol(){
+        return vtotal;
+    }
+    float getcost(){
+        return cost;
     }
     
     public double heuristic2(Integer v_util, Float cost) { //coste
@@ -616,6 +633,7 @@ public class ProbIA5Board {
             return false;
         }
     }
+    
      
 
 public void calc_dist()
@@ -676,6 +694,7 @@ public void calc_dist()
             System.out.println();
         }*/
     }
+}
     
     /**
         /////////////////////
@@ -756,432 +775,3 @@ public void calc_dist()
     
     
     **/
-
-public void printdist(){
-        System.out.println("dist");
-        for(int i = 0; i<m_dist.size() ; i++){
-            System.out.println(i + " :" );
-            for(int j = 0; j<m_dist.size();j++){
-                System.out.print(m_dist.get(i).get(j) +" ");
-            }
-            System.out.println();
-        }
-    }
-    public void printclose(){
-        System.out.println("close");
-        for(int i = 0; i<m_dist.size() ; i++){
-            System.out.println(i + " :" );
-            for(int j = 0; j<m_dist.size();j++){
-                System.out.print(closest.get(i).get(j) +" ");
-            }
-            System.out.println();
-        }
-    }
-}
-
-//PRINT de INIT2 para: 2 centros/200 sensores
-    /*
-Nodo 0(size: 25)  hijos:
-2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 
-Nodo 2(size: 2)  hijos:
-52 53 
-Nodo 52(size: 2)  hijos:
-102 104 
-Nodo 102(size: 0)  hijos:
-
-Nodo 104(size: 0)  hijos:
-
-Nodo 53(size: 2)  hijos:
-106 108 
-Nodo 106(size: 0)  hijos:
-
-Nodo 108(size: 0)  hijos:
-
-Nodo 3(size: 2)  hijos:
-54 55 
-Nodo 54(size: 2)  hijos:
-110 112 
-Nodo 110(size: 0)  hijos:
-
-Nodo 112(size: 0)  hijos:
-
-Nodo 55(size: 2)  hijos:
-114 116 
-Nodo 114(size: 0)  hijos:
-
-Nodo 116(size: 0)  hijos:
-
-Nodo 4(size: 2)  hijos:
-56 57 
-Nodo 56(size: 2)  hijos:
-118 120 
-Nodo 118(size: 0)  hijos:
-
-Nodo 120(size: 0)  hijos:
-
-Nodo 57(size: 2)  hijos:
-122 124 
-Nodo 122(size: 0)  hijos:
-
-Nodo 124(size: 0)  hijos:
-
-Nodo 5(size: 2)  hijos:
-58 59 
-Nodo 58(size: 2)  hijos:
-126 128 
-Nodo 126(size: 0)  hijos:
-
-Nodo 128(size: 0)  hijos:
-
-Nodo 59(size: 2)  hijos:
-130 132 
-Nodo 130(size: 0)  hijos:
-
-Nodo 132(size: 0)  hijos:
-
-Nodo 6(size: 2)  hijos:
-60 61 
-Nodo 60(size: 2)  hijos:
-134 136 
-Nodo 134(size: 0)  hijos:
-
-Nodo 136(size: 0)  hijos:
-
-Nodo 61(size: 2)  hijos:
-138 140 
-Nodo 138(size: 0)  hijos:
-
-Nodo 140(size: 0)  hijos:
-
-Nodo 7(size: 2)  hijos:
-62 63 
-Nodo 62(size: 2)  hijos:
-142 144 
-Nodo 142(size: 0)  hijos:
-
-Nodo 144(size: 0)  hijos:
-
-Nodo 63(size: 2)  hijos:
-146 148 
-Nodo 146(size: 0)  hijos:
-
-Nodo 148(size: 0)  hijos:
-
-Nodo 8(size: 2)  hijos:
-64 65 
-Nodo 64(size: 2)  hijos:
-150 152 
-Nodo 150(size: 0)  hijos:
-
-Nodo 152(size: 0)  hijos:
-
-Nodo 65(size: 2)  hijos:
-154 156 
-Nodo 154(size: 0)  hijos:
-
-Nodo 156(size: 0)  hijos:
-
-Nodo 9(size: 2)  hijos:
-66 67 
-Nodo 66(size: 2)  hijos:
-158 160 
-Nodo 158(size: 0)  hijos:
-
-Nodo 160(size: 0)  hijos:
-
-Nodo 67(size: 2)  hijos:
-162 164 
-Nodo 162(size: 0)  hijos:
-
-Nodo 164(size: 0)  hijos:
-
-Nodo 10(size: 2)  hijos:
-68 69 
-Nodo 68(size: 2)  hijos:
-166 168 
-Nodo 166(size: 0)  hijos:
-
-Nodo 168(size: 0)  hijos:
-
-Nodo 69(size: 2)  hijos:
-170 172 
-Nodo 170(size: 0)  hijos:
-
-Nodo 172(size: 0)  hijos:
-
-Nodo 11(size: 2)  hijos:
-70 71 
-Nodo 70(size: 2)  hijos:
-174 176 
-Nodo 174(size: 0)  hijos:
-
-Nodo 176(size: 0)  hijos:
-
-Nodo 71(size: 2)  hijos:
-178 180 
-Nodo 178(size: 0)  hijos:
-
-Nodo 180(size: 0)  hijos:
-
-Nodo 12(size: 2)  hijos:
-72 73 
-Nodo 72(size: 2)  hijos:
-182 184 
-Nodo 182(size: 0)  hijos:
-
-Nodo 184(size: 0)  hijos:
-
-Nodo 73(size: 2)  hijos:
-186 188 
-Nodo 186(size: 0)  hijos:
-
-Nodo 188(size: 0)  hijos:
-
-Nodo 13(size: 2)  hijos:
-74 75 
-Nodo 74(size: 2)  hijos:
-190 192 
-Nodo 190(size: 0)  hijos:
-
-Nodo 192(size: 0)  hijos:
-
-Nodo 75(size: 2)  hijos:
-194 196 
-Nodo 194(size: 0)  hijos:
-
-Nodo 196(size: 0)  hijos:
-
-Nodo 14(size: 2)  hijos:
-76 77 
-Nodo 76(size: 2)  hijos:
-198 200 
-Nodo 198(size: 0)  hijos:
-
-Nodo 200(size: 0)  hijos:
-
-Nodo 77(size: 0)  hijos:
-
-Nodo 15(size: 2)  hijos:
-78 79 
-Nodo 78(size: 0)  hijos:
-
-Nodo 79(size: 0)  hijos:
-
-Nodo 16(size: 2)  hijos:
-80 81 
-Nodo 80(size: 0)  hijos:
-
-Nodo 81(size: 0)  hijos:
-
-Nodo 17(size: 2)  hijos:
-82 83 
-Nodo 82(size: 0)  hijos:
-
-Nodo 83(size: 0)  hijos:
-
-Nodo 18(size: 2)  hijos:
-84 85 
-Nodo 84(size: 0)  hijos:
-
-Nodo 85(size: 0)  hijos:
-
-Nodo 19(size: 2)  hijos:
-86 87 
-Nodo 86(size: 0)  hijos:
-
-Nodo 87(size: 0)  hijos:
-
-Nodo 20(size: 2)  hijos:
-88 89 
-Nodo 88(size: 0)  hijos:
-
-Nodo 89(size: 0)  hijos:
-
-Nodo 21(size: 2)  hijos:
-90 91 
-Nodo 90(size: 0)  hijos:
-
-Nodo 91(size: 0)  hijos:
-
-Nodo 22(size: 2)  hijos:
-92 93 
-Nodo 92(size: 0)  hijos:
-
-Nodo 93(size: 0)  hijos:
-
-Nodo 23(size: 2)  hijos:
-94 95 
-Nodo 94(size: 0)  hijos:
-
-Nodo 95(size: 0)  hijos:
-
-Nodo 24(size: 2)  hijos:
-96 97 
-Nodo 96(size: 0)  hijos:
-
-Nodo 97(size: 0)  hijos:
-
-Nodo 25(size: 2)  hijos:
-98 99 
-Nodo 98(size: 0)  hijos:
-
-Nodo 99(size: 0)  hijos:
-
-Nodo 26(size: 2)  hijos:
-100 101 
-Nodo 100(size: 0)  hijos:
-
-Nodo 101(size: 0)  hijos:
-
-Nodo 1(size: 25)  hijos:
-27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 
-Nodo 27(size: 2)  hijos:
-103 105 
-Nodo 103(size: 2)  hijos:
-107 109 
-Nodo 107(size: 0)  hijos:
-
-Nodo 109(size: 0)  hijos:
-
-Nodo 105(size: 2)  hijos:
-111 113 
-Nodo 111(size: 0)  hijos:
-
-Nodo 113(size: 0)  hijos:
-
-Nodo 28(size: 2)  hijos:
-115 117 
-Nodo 115(size: 2)  hijos:
-119 121 
-Nodo 119(size: 0)  hijos:
-
-Nodo 121(size: 0)  hijos:
-
-Nodo 117(size: 2)  hijos:
-123 125 
-Nodo 123(size: 0)  hijos:
-
-Nodo 125(size: 0)  hijos:
-
-Nodo 29(size: 2)  hijos:
-127 129 
-Nodo 127(size: 2)  hijos:
-131 133 
-Nodo 131(size: 0)  hijos:
-
-Nodo 133(size: 0)  hijos:
-
-Nodo 129(size: 2)  hijos:
-135 137 
-Nodo 135(size: 0)  hijos:
-
-Nodo 137(size: 0)  hijos:
-
-Nodo 30(size: 2)  hijos:
-139 141 
-Nodo 139(size: 2)  hijos:
-143 145 
-Nodo 143(size: 0)  hijos:
-
-Nodo 145(size: 0)  hijos:
-
-Nodo 141(size: 2)  hijos:
-147 149 
-Nodo 147(size: 0)  hijos:
-
-Nodo 149(size: 0)  hijos:
-
-Nodo 31(size: 2)  hijos:
-151 153 
-Nodo 151(size: 2)  hijos:
-155 157 
-Nodo 155(size: 0)  hijos:
-
-Nodo 157(size: 0)  hijos:
-
-Nodo 153(size: 2)  hijos:
-159 161 
-Nodo 159(size: 0)  hijos:
-
-Nodo 161(size: 0)  hijos:
-
-Nodo 32(size: 2)  hijos:
-163 165 
-Nodo 163(size: 2)  hijos:
-167 169 
-Nodo 167(size: 0)  hijos:
-
-Nodo 169(size: 0)  hijos:
-
-Nodo 165(size: 2)  hijos:
-171 173 
-Nodo 171(size: 0)  hijos:
-
-Nodo 173(size: 0)  hijos:
-
-Nodo 33(size: 2)  hijos:
-175 177 
-Nodo 175(size: 2)  hijos:
-179 181 
-Nodo 179(size: 0)  hijos:
-
-Nodo 181(size: 0)  hijos:
-
-Nodo 177(size: 2)  hijos:
-183 185 
-Nodo 183(size: 0)  hijos:
-
-Nodo 185(size: 0)  hijos:
-
-Nodo 34(size: 2)  hijos:
-187 189 
-Nodo 187(size: 2)  hijos:
-191 193 
-Nodo 191(size: 0)  hijos:
-
-Nodo 193(size: 0)  hijos:
-
-Nodo 189(size: 2)  hijos:
-195 197 
-Nodo 195(size: 0)  hijos:
-
-Nodo 197(size: 0)  hijos:
-
-Nodo 35(size: 2)  hijos:
-199 201 
-Nodo 199(size: 0)  hijos:
-
-Nodo 201(size: 0)  hijos:
-
-Nodo 36(size: 0)  hijos:
-
-Nodo 37(size: 0)  hijos:
-
-Nodo 38(size: 0)  hijos:
-
-Nodo 39(size: 0)  hijos:
-
-Nodo 40(size: 0)  hijos:
-
-Nodo 41(size: 0)  hijos:
-
-Nodo 42(size: 0)  hijos:
-
-Nodo 43(size: 0)  hijos:
-
-Nodo 44(size: 0)  hijos:
-
-Nodo 45(size: 0)  hijos:
-
-Nodo 46(size: 0)  hijos:
-
-Nodo 47(size: 0)  hijos:
-
-Nodo 48(size: 0)  hijos:
-
-Nodo 49(size: 0)  hijos:
-
-Nodo 50(size: 0)  hijos:
-
-Nodo 51(size: 0)  hijos:
-*/

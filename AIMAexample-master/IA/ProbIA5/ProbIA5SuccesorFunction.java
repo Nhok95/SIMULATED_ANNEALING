@@ -39,10 +39,12 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 //fem el canvi de pare corresponent, només si es pot
                 //System.out.println("SUCCESSOR FUNCTION: (MiFADER): "+board.father(i)+"; (x): "+x+"; (i): "+i);
                 if(newboard.change(board.father(i), x, i)) {
+                    
                     //System.out.println("i:" + i);
                     //System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
                     retval.add(new Successor((new String 
-                         (i +" cambio de padre de " +board.father(i)+ " a " +x+ " (h:" +newboard.heuristic()+")")
+                         (i +" cambio de padre de " +board.father(i)+ " a " +x+ " (h:" +newboard.heuristic()+
+                                 "; c: "+newboard.getcost()+"; v: "+newboard.getvol()+"; n_c:"+newboard.num_c_u()+")")
                                     ), newboard));
                 }
                
@@ -61,7 +63,8 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
                 //fem el canvi de pare corresponent, només si es pot
                 if(newboard.change(board.father(i), x, i)) {
                     retval.add(new Successor((new String 
-                        (i +" cambio de padre de " +board.father(i)+ " a " +x + " (h:" +newboard.heuristic()+")")
+                        (i +" cambio de padre de " +board.father(i)+ " a " +x+ " (h:" +newboard.heuristic()+
+                                 "; c: "+newboard.getcost()+"; v: "+newboard.getvol()+"; n_c:"+newboard.num_c_u()+")")
                         ), newboard));
                 }
                
@@ -84,7 +87,8 @@ public class ProbIA5SuccesorFunction implements SuccessorFunction{
         
         if(newboard.change(board.father(fill), noupare, fill)) {
             //System.out.println("+-+-+-+-+-+-+-+-+-+expansion correcta+-+-+-+-+-+-+-+-+");
-            String s = new String(fill +" cambio de padre de " +board.father(fill)+ " a " +noupare + " (h:" +newboard.heuristic()+")");
+            String s = new String(fill +" cambio de padre de " +board.father(fill)+ " a " +noupare + " (h:" +newboard.heuristic()+
+                    "; c: "+newboard.getcost()+"; v: "+newboard.getvol()+"; n_c:"+newboard.num_c_u()+")");
             System.out.println(s);
             //newboard.printsol();
             retval.add(new Successor(s, newboard));
